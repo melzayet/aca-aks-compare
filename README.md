@@ -5,7 +5,7 @@ This repository visually depicts main cloud native activities or decisions on Az
 ## Selecting the platform
 <a href="http://www.youtube.com/watch?feature=player_embedded&v=6s109Uwr608
 " target="_blank"><img src="http://img.youtube.com/vi/6s109Uwr608/0.jpg" 
-alt="CNCF Test" width="240" height="180" border="10" /></a>
+alt="CNCF Test" /></a>
 
 ## Deploying our app
 ## Going private
