@@ -144,7 +144,7 @@ resource containerAppTodoAPI 'Microsoft.App/containerApps@2022-06-01-preview' ={
     managedEnvironmentId: containerAppsEnv.id  
     configuration: {
       ingress: {
-        targetPort: 80
+        targetPort: 3000
         external: true
       } 
       secrets: [
@@ -165,13 +165,13 @@ resource containerAppTodoAPI 'Microsoft.App/containerApps@2022-06-01-preview' ={
     template: {
       containers: [
         {
-          image: 'melzayet/todo-api:v0.5'
+          image: 'melzayet/todo-api:v3.1'
           name: 'todo-cosmos'
           probes: [
             {
               failureThreshold: 3
               tcpSocket: {                
-                port: 80                
+                port: 3000                
               }
               initialDelaySeconds: 10
               periodSeconds: 10
@@ -182,7 +182,7 @@ resource containerAppTodoAPI 'Microsoft.App/containerApps@2022-06-01-preview' ={
             {
               failureThreshold: 3
               tcpSocket: {                
-                port: 80                
+                port: 3000                
               }
               initialDelaySeconds: 10
               periodSeconds: 10
@@ -221,18 +221,7 @@ resource containerAppTodoAPI 'Microsoft.App/containerApps@2022-06-01-preview' ={
         }
       ]
       scale: {
-        minReplicas: 1
-        maxReplicas: 3
-        rules: [
-          {   
-            name: 'http-scaler'
-            http: {
-              metadata: {
-                concurrentRequests: '100'
-              }
-            }            
-          }
-        ]
+        minReplicas: 0
       }
     }
   }
@@ -245,20 +234,20 @@ resource containerAppTodoUI 'Microsoft.App/containerApps@2022-06-01-preview' ={
     managedEnvironmentId: containerAppsEnv.id  
     configuration: {
       ingress: {
-        targetPort: 80
+        targetPort: 5000
         external: true
       }   
     }
     template: {
       containers: [
         {
-          image: 'melzayet/todo-ui:v0.5'
+          image: 'melzayet/todo-ui:v3.0'
           name: 'todo-ui'
           probes: [
             {
               failureThreshold: 3
               tcpSocket: {                
-                port: 80                
+                port: 5000               
               }
               initialDelaySeconds: 10
               periodSeconds: 10
@@ -269,7 +258,7 @@ resource containerAppTodoUI 'Microsoft.App/containerApps@2022-06-01-preview' ={
             {
               failureThreshold: 3
               tcpSocket: {                
-                port: 80                
+                port: 5000                
               }
               initialDelaySeconds: 10
               periodSeconds: 10
@@ -281,24 +270,13 @@ resource containerAppTodoUI 'Microsoft.App/containerApps@2022-06-01-preview' ={
           env: [
             {
               name: 'apiEndpoint'
-              value: 'https://${containerAppTodoAPI.properties.latestRevisionFqdn}/todoitems'
+              value: 'https://${containerAppTodoAPI.properties.latestRevisionFqdn}/todo'
             }            
           ]
         }
       ]
       scale: {
-        minReplicas: 1
-        maxReplicas: 3
-        rules: [
-          {   
-            name: 'http-scaler-ui'
-            http: {
-              metadata: {
-                concurrentRequests: '100'
-              }
-            }            
-          }
-        ]
+        minReplicas: 0
       }
     }
   }
