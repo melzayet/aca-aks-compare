@@ -97,8 +97,8 @@ resource containerAppsEnv 'Microsoft.App/managedEnvironments@2022-06-01-preview'
     }
     zoneRedundant: true
     vnetConfiguration: {
-      infrastructureSubnetId: virtualNetwork::infraSubnet.id
-      runtimeSubnetId: virtualNetwork::appsSubnet.id
+      infrastructureSubnetId: infraSubnet.id
+      runtimeSubnetId: appsSubnet.id
       internal: false
       dockerBridgeCidr: '172.17.0.1/16'
       platformReservedCidr: '192.168.100.0/24'
