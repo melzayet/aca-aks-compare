@@ -82,7 +82,7 @@ resource aksCluster 'Microsoft.ContainerService/managedClusters@2022-09-02-previ
     }
     workloadAutoScalerProfile: {
       keda: {
-        enabled: true
+        enabled: false
       }      
     }
   }
