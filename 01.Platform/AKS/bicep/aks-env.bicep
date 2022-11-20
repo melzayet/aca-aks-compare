@@ -57,7 +57,7 @@ resource aksCluster 'Microsoft.ContainerService/managedClusters@2022-09-02-previ
     ]
     apiServerAccessProfile: {
       disableRunCommand: true
-      enableVnetIntegration: true      
+      enableVnetIntegration: false      
       subnetId: infraSubnet.id
     }   
     autoUpgradeProfile: {
