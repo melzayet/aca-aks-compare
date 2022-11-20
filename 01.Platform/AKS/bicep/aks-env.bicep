@@ -71,7 +71,7 @@ resource aksCluster 'Microsoft.ContainerService/managedClusters@2022-09-02-previ
       networkPluginMode: 'Overlay'
       networkPolicy:'calico'
       outboundType:'loadBalancer'
-      podCidr: '10.0.3.0/24'      
+      podCidr: '172.17.0.0/23'     
       serviceCidr: '192.168.100.0/24'
     }
     oidcIssuerProfile: {
@@ -92,6 +92,7 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2019-11-01' = {
     addressSpace: {
       addressPrefixes: [
         '10.0.0.0/16'
+        '172.17.0.0/23'
       ]
     }
   }
