@@ -100,6 +100,14 @@ resource infraSubnet 'Microsoft.Network/virtualNetworks/subnets@2022-05-01' = {
   parent: virtualNetwork
   properties: {
     addressPrefix: '10.0.0.0/23'
+    serviceEndpoints: [
+      {
+        locations: [
+          location
+        ]
+        service: 'Microsoft.AzureCosmosDB'
+      }
+    ]
   }
 }
 
@@ -196,6 +204,13 @@ resource cosmosAccount 'Microsoft.DocumentDB/databaseAccounts@2022-05-15' = {
         name: 'EnableServerless'
       }
     ]
+    virtualNetworkRules: [
+      {
+        id: infraSubnet.id
+        ignoreMissingVNetServiceEndpoint: false
+      }
+    ]
+
     databaseAccountOfferType: 'Standard'
   }
 }

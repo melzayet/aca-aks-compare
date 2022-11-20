@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.12.40.16777",
-      "templateHash": "9462483100931726666"
+      "templateHash": "246390868171283785"
     }
   },
   "parameters": {
@@ -80,20 +80,15 @@
             "osDiskType": "Managed",
             "osSKU": "Ubuntu",
             "osType": "Linux",
-            "podSubnetID": "[resourceId('Microsoft.Network/virtualNetworks/subnets', split(variables('appSubnetName'), '/')[0], split(variables('appSubnetName'), '/')[1])]",
+            "podSubnetID": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'aca-devtest-vnet', variables('appSubnetName'))]",
             "type": "VirtualMachineScaleSets",
             "upgradeSettings": {
               "maxSurge": "33%"
             },
             "vmSize": "standard_b2ms",
-            "vnetSubnetID": "[resourceId('Microsoft.Network/virtualNetworks/subnets', split(variables('appSubnetName'), '/')[0], split(variables('appSubnetName'), '/')[1])]"
+            "vnetSubnetID": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'aca-devtest-vnet', variables('infraSubnetName'))]"
           }
         ],
-        "apiServerAccessProfile": {
-          "disableRunCommand": true,
-          "enableVnetIntegration": false,
-          "subnetId": "[resourceId('Microsoft.Network/virtualNetworks/subnets', split(variables('appSubnetName'), '/')[0], split(variables('appSubnetName'), '/')[1])]"
-        },
         "autoUpgradeProfile": {
           "upgradeChannel": "patch"
         },
@@ -105,10 +100,8 @@
           "dockerBridgeCidr": "172.17.0.1/16",
           "loadBalancerSku": "standard",
           "networkPlugin": "azure",
-          "networkPluginMode": "Overlay",
           "networkPolicy": "calico",
           "outboundType": "loadBalancer",
-          "podCidr": "10.0.2.0/24",
           "serviceCidr": "192.168.100.0/24"
         },
         "oidcIssuerProfile": {
@@ -119,7 +112,11 @@
             "enabled": false
           }
         }
-      }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'aca-devtest-vnet', variables('appSubnetName'))]",
+        "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'aca-devtest-vnet', variables('infraSubnetName'))]"
+      ]
     },
     {
       "type": "Microsoft.Network/virtualNetworks",
@@ -131,22 +128,38 @@
           "addressPrefixes": [
             "10.0.0.0/16"
           ]
-        },
-        "subnets": [
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Network/virtualNetworks/subnets",
+      "apiVersion": "2022-05-01",
+      "name": "[format('{0}/{1}', 'aca-devtest-vnet', variables('infraSubnetName'))]",
+      "properties": {
+        "addressPrefix": "10.0.0.0/23",
+        "serviceEndpoints": [
           {
-            "name": "[variables('infraSubnetName')]",
-            "properties": {
-              "addressPrefix": "10.0.0.0/23"
-            }
-          },
-          {
-            "name": "[variables('appSubnetName')]",
-            "properties": {
-              "addressPrefix": "10.0.2.0/23"
-            }
+            "locations": [
+              "[parameters('location')]"
+            ],
+            "service": "Microsoft.AzureCosmosDB"
           }
         ]
-      }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/virtualNetworks', 'aca-devtest-vnet')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Network/virtualNetworks/subnets",
+      "apiVersion": "2022-05-01",
+      "name": "[format('{0}/{1}', 'aca-devtest-vnet', variables('appSubnetName'))]",
+      "properties": {
+        "addressPrefix": "10.0.2.0/23"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/virtualNetworks', 'aca-devtest-vnet')]"
+      ]
     },
     {
       "type": "Microsoft.KeyVault/vaults",
@@ -190,7 +203,7 @@
     {
       "type": "Microsoft.KeyVault/vaults/secrets",
       "apiVersion": "2019-09-01",
-      "name": "[format('{0}/{1}', parameters('keyVaultName'), 'MI_CLIENT_ID')]",
+      "name": "[format('{0}/{1}', parameters('keyVaultName'), 'MiClientID')]",
       "properties": {
         "value": "[parameters('appIdentityclientId')]"
       },
@@ -243,8 +256,17 @@
             "name": "EnableServerless"
           }
         ],
+        "virtualNetworkRules": [
+          {
+            "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'aca-devtest-vnet', variables('infraSubnetName'))]",
+            "ignoreMissingVNetServiceEndpoint": false
+          }
+        ],
         "databaseAccountOfferType": "Standard"
-      }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'aca-devtest-vnet', variables('infraSubnetName'))]"
+      ]
     },
     {
       "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases",
