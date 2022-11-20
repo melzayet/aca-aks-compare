@@ -56,12 +56,7 @@ resource aksCluster 'Microsoft.ContainerService/managedClusters@2022-09-02-previ
         vmSize: 'standard_b2ms'
         vnetSubnetID: infraSubnet.id
       }
-    ]
-    apiServerAccessProfile: {
-      disableRunCommand: true
-      enableVnetIntegration: false      
-      subnetId: infraSubnet.id
-    }   
+    ]  
     autoUpgradeProfile: {
       upgradeChannel: 'patch'
     }       
@@ -165,7 +160,7 @@ resource keyVaultSecretStorage 'Microsoft.KeyVault/vaults/secrets@2019-09-01' = 
 
 resource keyVaultSecretMI 'Microsoft.KeyVault/vaults/secrets@2019-09-01' = {
   parent: keyVault
-  name: 'MI_CLIENT_ID'
+  name: 'MiClientID'
   properties: {
     value: appIdentityclientId
   }
