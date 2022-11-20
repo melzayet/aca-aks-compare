@@ -1,6 +1,6 @@
 # Azure Cloud Native: Depicted
 
-This repository visually depicts main cloud native activities or decisions on Azure. The goal is to help you build a solid understanding and ability to execute with confidence
+Get deeper in Cloud Native, one story at a time. This series will use Azure as the cloud platform
 
 ## Selecting the platform
 <a href="http://www.youtube.com/watch?feature=player_embedded&v=6s109Uwr608
