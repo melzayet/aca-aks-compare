@@ -28,13 +28,12 @@ jobs:
           client-id: ${{ secrets.DEPLOY_IDENTITY_CLIENT_ID }}
           tenant-id: ${{ secrets.TENANT_ID }}
           subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
-            
-      - name: 'Deploy AKS Infra'
-        uses: azure/arm-deploy@v1
+
+      - name: Azure CLI script
+        uses: azure/CLI@v1
         with:
-          subscriptionId: ${{ secrets.SUBSCRIPTION_ID }}
-          resourceGroupName: ${{ secrets.AKS_RG }}
-          template: 01.Platform/AKS/bicep/aks-env.bicep
-          parameters: appIdentityclientId= ${{ secrets.APP_IDENTITY_CLIENT_ID }} appIdentityPrincipalId=${{ secrets.APP_IDENTITY_PRINCIPAL_ID }} adminGroupObjectId=${{ secrets.AKS_ADMIN_GROUP_ID }}
-          failOnStdErr: true'
+          azcliversion: 2.41.0
+          inlineScript: |
+            az deployment group create -g ${{ secrets.AKS_RG }} --template-file 01.Platform/AKS/bicep/aks-env.bicep --parameters appIdentityclientId= ${{ secrets.APP_IDENTITY_CLIENT_ID }} appIdentityPrincipalId=${{ secrets.APP_IDENTITY_PRINCIPAL_ID }} adminGroupObjectId=${{ secrets.AKS_ADMIN_GROUP_ID }}
+    
       
