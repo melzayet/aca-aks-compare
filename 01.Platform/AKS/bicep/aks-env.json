@@ -1,0 +1,334 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.12.40.16777",
+      "templateHash": "9462483100931726666"
+    }
+  },
+  "parameters": {
+    "location": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]"
+    },
+    "keyVaultName": {
+      "type": "string",
+      "defaultValue": "cn-kv-maelzaye"
+    },
+    "aksClusterName": {
+      "type": "string",
+      "defaultValue": "aks-demo"
+    },
+    "appIdentityPrincipalId": {
+      "type": "string"
+    },
+    "appIdentityclientId": {
+      "type": "string"
+    },
+    "adminGroupObjectId": {
+      "type": "string"
+    }
+  },
+  "variables": {
+    "appSubnetName": "apps-subnet",
+    "infraSubnetName": "infra-subnet",
+    "uniqueSuffix": "[substring(uniqueString(resourceGroup().id), 0, 4)]",
+    "databaseName": "todoapp",
+    "containerName": "tasks",
+    "blobContainerName": "dotnet-data-protection"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.ContainerService/managedClusters",
+      "apiVersion": "2022-09-02-preview",
+      "name": "[parameters('aksClusterName')]",
+      "location": "[parameters('location')]",
+      "sku": {
+        "name": "Basic",
+        "tier": "Free"
+      },
+      "identity": {
+        "type": "SystemAssigned"
+      },
+      "properties": {
+        "aadProfile": {
+          "adminGroupObjectIDs": [
+            "[parameters('adminGroupObjectId')]"
+          ],
+          "enableAzureRBAC": true,
+          "managed": true,
+          "tenantID": "[tenant().tenantId]"
+        },
+        "dnsPrefix": "[parameters('aksClusterName')]",
+        "agentPoolProfiles": [
+          {
+            "availabilityZones": [
+              "1",
+              "2",
+              "3"
+            ],
+            "count": 1,
+            "enableAutoScaling": true,
+            "maxCount": 2,
+            "minCount": 1,
+            "mode": "System",
+            "name": "default",
+            "orchestratorVersion": "1.24.6",
+            "osDiskSizeGB": 128,
+            "osDiskType": "Managed",
+            "osSKU": "Ubuntu",
+            "osType": "Linux",
+            "podSubnetID": "[resourceId('Microsoft.Network/virtualNetworks/subnets', split(variables('appSubnetName'), '/')[0], split(variables('appSubnetName'), '/')[1])]",
+            "type": "VirtualMachineScaleSets",
+            "upgradeSettings": {
+              "maxSurge": "33%"
+            },
+            "vmSize": "standard_b2ms",
+            "vnetSubnetID": "[resourceId('Microsoft.Network/virtualNetworks/subnets', split(variables('appSubnetName'), '/')[0], split(variables('appSubnetName'), '/')[1])]"
+          }
+        ],
+        "apiServerAccessProfile": {
+          "disableRunCommand": true,
+          "enableVnetIntegration": false,
+          "subnetId": "[resourceId('Microsoft.Network/virtualNetworks/subnets', split(variables('appSubnetName'), '/')[0], split(variables('appSubnetName'), '/')[1])]"
+        },
+        "autoUpgradeProfile": {
+          "upgradeChannel": "patch"
+        },
+        "disableLocalAccounts": true,
+        "enableRBAC": true,
+        "kubernetesVersion": "1.24.6",
+        "networkProfile": {
+          "dnsServiceIP": "192.168.100.10",
+          "dockerBridgeCidr": "172.17.0.1/16",
+          "loadBalancerSku": "standard",
+          "networkPlugin": "azure",
+          "networkPluginMode": "Overlay",
+          "networkPolicy": "calico",
+          "outboundType": "loadBalancer",
+          "podCidr": "10.0.2.0/24",
+          "serviceCidr": "192.168.100.0/24"
+        },
+        "oidcIssuerProfile": {
+          "enabled": true
+        },
+        "workloadAutoScalerProfile": {
+          "keda": {
+            "enabled": false
+          }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Network/virtualNetworks",
+      "apiVersion": "2019-11-01",
+      "name": "aca-devtest-vnet",
+      "location": "[parameters('location')]",
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "10.0.0.0/16"
+          ]
+        },
+        "subnets": [
+          {
+            "name": "[variables('infraSubnetName')]",
+            "properties": {
+              "addressPrefix": "10.0.0.0/23"
+            }
+          },
+          {
+            "name": "[variables('appSubnetName')]",
+            "properties": {
+              "addressPrefix": "10.0.2.0/23"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.KeyVault/vaults",
+      "apiVersion": "2019-09-01",
+      "name": "[parameters('keyVaultName')]",
+      "location": "[parameters('location')]",
+      "properties": {
+        "enabledForTemplateDeployment": true,
+        "tenantId": "[tenant().tenantId]",
+        "accessPolicies": [],
+        "sku": {
+          "name": "standard",
+          "family": "A"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.KeyVault/vaults/secrets",
+      "apiVersion": "2019-09-01",
+      "name": "[format('{0}/{1}', parameters('keyVaultName'), 'CosmosEndpoint')]",
+      "properties": {
+        "value": "[format('https://{0}.documents.azure.com:443/', toLower(format('{0}-todo', variables('uniqueSuffix'))))]"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.DocumentDB/databaseAccounts', toLower(format('{0}-todo', variables('uniqueSuffix'))))]",
+        "[resourceId('Microsoft.KeyVault/vaults', parameters('keyVaultName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.KeyVault/vaults/secrets",
+      "apiVersion": "2019-09-01",
+      "name": "[format('{0}/{1}', parameters('keyVaultName'), 'DataProtectionEndpoint')]",
+      "properties": {
+        "value": "[format('https://{0}.blob.{1}/{2}/keys', replace(format('{0}sa', variables('uniqueSuffix')), '-', ''), environment().suffixes.storage, variables('blobContainerName'))]"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.KeyVault/vaults', parameters('keyVaultName'))]",
+        "[resourceId('Microsoft.Storage/storageAccounts', replace(format('{0}sa', variables('uniqueSuffix')), '-', ''))]"
+      ]
+    },
+    {
+      "type": "Microsoft.KeyVault/vaults/secrets",
+      "apiVersion": "2019-09-01",
+      "name": "[format('{0}/{1}', parameters('keyVaultName'), 'MI_CLIENT_ID')]",
+      "properties": {
+        "value": "[parameters('appIdentityclientId')]"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.KeyVault/vaults', parameters('keyVaultName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "apiVersion": "2021-09-01",
+      "name": "[replace(format('{0}sa', variables('uniqueSuffix')), '-', '')]",
+      "location": "[parameters('location')]",
+      "sku": {
+        "name": "Standard_LRS"
+      },
+      "kind": "StorageV2",
+      "properties": {
+        "accessTier": "Hot",
+        "minimumTlsVersion": "TLS1_2",
+        "supportsHttpsTrafficOnly": true
+      }
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+      "apiVersion": "2021-02-01",
+      "name": "[format('{0}/default/{1}', replace(format('{0}sa', variables('uniqueSuffix')), '-', ''), variables('blobContainerName'))]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts', replace(format('{0}sa', variables('uniqueSuffix')), '-', ''))]"
+      ]
+    },
+    {
+      "type": "Microsoft.DocumentDB/databaseAccounts",
+      "apiVersion": "2022-05-15",
+      "name": "[toLower(format('{0}-todo', variables('uniqueSuffix')))]",
+      "location": "[parameters('location')]",
+      "kind": "GlobalDocumentDB",
+      "properties": {
+        "consistencyPolicy": {
+          "defaultConsistencyLevel": "Eventual"
+        },
+        "locations": [
+          {
+            "locationName": "[parameters('location')]",
+            "failoverPriority": 0,
+            "isZoneRedundant": false
+          }
+        ],
+        "capabilities": [
+          {
+            "name": "EnableServerless"
+          }
+        ],
+        "databaseAccountOfferType": "Standard"
+      }
+    },
+    {
+      "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases",
+      "apiVersion": "2022-05-15",
+      "name": "[format('{0}/{1}', toLower(format('{0}-todo', variables('uniqueSuffix'))), variables('databaseName'))]",
+      "properties": {
+        "resource": {
+          "id": "[variables('databaseName')]"
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.DocumentDB/databaseAccounts', toLower(format('{0}-todo', variables('uniqueSuffix'))))]"
+      ]
+    },
+    {
+      "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers",
+      "apiVersion": "2022-05-15",
+      "name": "[format('{0}/{1}/{2}', toLower(format('{0}-todo', variables('uniqueSuffix'))), variables('databaseName'), variables('containerName'))]",
+      "properties": {
+        "resource": {
+          "id": "[variables('containerName')]",
+          "partitionKey": {
+            "paths": [
+              "/id"
+            ],
+            "kind": "Hash"
+          }
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.DocumentDB/databaseAccounts/sqlDatabases', toLower(format('{0}-todo', variables('uniqueSuffix'))), variables('databaseName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Authorization/roleAssignments",
+      "apiVersion": "2020-04-01-preview",
+      "scope": "[format('Microsoft.Storage/storageAccounts/{0}', replace(format('{0}sa', variables('uniqueSuffix')), '-', ''))]",
+      "name": "[guid(resourceId('Microsoft.Storage/storageAccounts', replace(format('{0}sa', variables('uniqueSuffix')), '-', '')))]",
+      "properties": {
+        "roleDefinitionId": "[extensionResourceId(resourceId('Microsoft.Storage/storageAccounts', replace(format('{0}sa', variables('uniqueSuffix')), '-', '')), 'Microsoft.Authorization/roleDefinitions', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe')]",
+        "principalId": "[parameters('appIdentityPrincipalId')]",
+        "principalType": "ServicePrincipal"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts', replace(format('{0}sa', variables('uniqueSuffix')), '-', ''))]"
+      ]
+    },
+    {
+      "type": "Microsoft.DocumentDB/databaseAccounts/sqlRoleDefinitions",
+      "apiVersion": "2021-05-15",
+      "name": "[format('{0}/{1}', toLower(format('{0}-todo', variables('uniqueSuffix'))), '736180af-7fbc-4c7f-9004-22735173c1c3')]",
+      "properties": {
+        "assignableScopes": [
+          "[resourceId('Microsoft.DocumentDB/databaseAccounts', toLower(format('{0}-todo', variables('uniqueSuffix'))))]"
+        ],
+        "permissions": [
+          {
+            "dataActions": [
+              "Microsoft.DocumentDB/databaseAccounts/readMetadata",
+              "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers/*",
+              "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers/items/*"
+            ]
+          }
+        ],
+        "roleName": "[format('{0}-cosmos-rbac', variables('uniqueSuffix'))]",
+        "type": "CustomRole"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.DocumentDB/databaseAccounts', toLower(format('{0}-todo', variables('uniqueSuffix'))))]"
+      ]
+    },
+    {
+      "type": "Microsoft.DocumentDB/databaseAccounts/sqlRoleAssignments",
+      "apiVersion": "2021-05-15",
+      "name": "[format('{0}/{1}', toLower(format('{0}-todo', variables('uniqueSuffix'))), '736180af-7fbc-4c7f-9004-22735173c1c4')]",
+      "properties": {
+        "principalId": "[parameters('appIdentityPrincipalId')]",
+        "roleDefinitionId": "[resourceId('Microsoft.DocumentDB/databaseAccounts/sqlRoleDefinitions', toLower(format('{0}-todo', variables('uniqueSuffix'))), '736180af-7fbc-4c7f-9004-22735173c1c3')]",
+        "scope": "[resourceId('Microsoft.DocumentDB/databaseAccounts', toLower(format('{0}-todo', variables('uniqueSuffix'))))]"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.DocumentDB/databaseAccounts', toLower(format('{0}-todo', variables('uniqueSuffix'))))]",
+        "[resourceId('Microsoft.DocumentDB/databaseAccounts/sqlRoleDefinitions', toLower(format('{0}-todo', variables('uniqueSuffix'))), '736180af-7fbc-4c7f-9004-22735173c1c3')]"
+      ]
+    }
+  ]
+}

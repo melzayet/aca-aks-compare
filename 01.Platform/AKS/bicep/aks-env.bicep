@@ -1,5 +1,5 @@
 param location string = resourceGroup().location
-param keyVaultName string = 'cn-kv'
+param keyVaultName string = 'cn-kv-maelzaye'
 param aksClusterName string = 'aks-demo'
 //principal id and object id are used interchangeably
 param appIdentityPrincipalId string
