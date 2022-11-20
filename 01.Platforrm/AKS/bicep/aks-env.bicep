@@ -1,6 +1,7 @@
 param location string = resourceGroup().location
 param keyVaultName string = 'cn-kv'
-param principalId string
+//principal id and object id are used interchangeably
+param appIdentityPrincipalId string
 param appIdentityclientId string
 param adminGroupObjectId string
 
@@ -13,12 +14,10 @@ var containerName = 'tasks'
 resource aksCluster 'Microsoft.ContainerService/managedClusters@2022-09-02-preview' = {
   name: 'aks-demo'
   location: location
-
   sku: {
     name: 'Basic'
     tier: 'Free'
   }
-
   identity: {
     type: 'SystemAssigned'
   }
@@ -251,7 +250,7 @@ resource storageRoleAssignment 'Microsoft.Authorization/roleAssignments@2020-04-
   name:guid(storage.id)
   properties: {
     roleDefinitionId: storageContributorRoleDefinition.id
-    principalId: principalId
+    principalId: appIdentityPrincipalId
     principalType:'ServicePrincipal'
   }
 }
@@ -281,7 +280,7 @@ resource cosmosRoleAssignment 'Microsoft.DocumentDB/databaseAccounts/sqlRoleAssi
   name: '736180af-7fbc-4c7f-9004-22735173c1c4'
   parent: cosmosAccount
   properties: {
-    principalId: principalId
+    principalId: appIdentityPrincipalId
     roleDefinitionId: cosmosRBAC.id
     scope: cosmosAccount.id
   }

@@ -1,0 +1,41 @@
+name: Trigger auto deployment for aks
+
+# When this action will be executed
+on:
+  # Automatically trigger it when detected changes in repo
+  push:
+    branches: 
+      [ main ]
+
+  # Allow manually trigger 
+  workflow_dispatch:      
+
+permissions:
+      id-token: write
+      contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    
+    steps:
+      - name: Checkout to the branch
+        uses: actions/checkout@v2
+      
+      - name: 'Az CLI login'
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.DEPLOY_IDENTITY_CLIENT_ID }}
+          tenant-id: ${{ secrets.TENANT_ID }}
+          subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
+            
+      - name: 'Deploy AKS Infra'
+        uses: azure/arm-deploy@v1
+        with:
+          subscriptionId: ${{ secrets.SUBSCRIPTION_ID }}
+          resourceGroupName: ${{ secrets.AKS_RG }}
+          template: ./01.Platform/AKS/bicep/aks-env.bicep
+          parameters: 'appIdentityclientId= ${{ secrets.APP_IDENTITY_CLIENT_ID }} appIdentityPrincipalId=${{ secrets.APP_IDENTITY_PRINCIPAL_ID }} adminGroupObjectId=${{ secrets.AKS_ADMIN_GROUP_ID }}'
+          failOnStdErr: true'
+      
