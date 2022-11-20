@@ -1,4 +1,5 @@
 param containerAppName string = 'todo-aca-cosmos'
+param infraSubnetName string = 'infra-subnet'
 param containerAppsEnvName string
 param location string = resourceGroup().location
 
@@ -26,6 +27,10 @@ resource storageAccount_container 'Microsoft.Storage/storageAccounts/blobService
   name: '${storage.name}/default/${blobContainerName}'
 }
 
+resource infraSubnet 'Microsoft.Network/virtualNetworks/subnets@2022-05-01' existing = {
+  name: infraSubnetName
+}
+
 resource cosmosAccount 'Microsoft.DocumentDB/databaseAccounts@2022-05-15' = {
   name: toLower('${uniqueSuffix}-todo')
   location: location
@@ -44,6 +49,12 @@ resource cosmosAccount 'Microsoft.DocumentDB/databaseAccounts@2022-05-15' = {
     capabilities: [
       {
         name: 'EnableServerless'
+      }
+    ]
+    virtualNetworkRules: [
+      {
+        id: infraSubnet.id
+        ignoreMissingVNetServiceEndpoint: false
       }
     ]
     databaseAccountOfferType: 'Standard'

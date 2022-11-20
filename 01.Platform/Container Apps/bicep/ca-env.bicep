@@ -31,13 +31,29 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2019-11-01' = {
       }
     ]
   }
+}
 
-  resource infraSubnet 'subnets' existing = {
-    name: infraSubnetName
+resource infraSubnet 'Microsoft.Network/virtualNetworks/subnets@2022-05-01' = {
+  name: infraSubnetName
+  parent: virtualNetwork
+  properties: {
+    addressPrefix: '10.0.0.0/23'
+    serviceEndpoints: [
+      {
+        locations: [
+          location
+        ]
+        service: 'Microsoft.AzureCosmosDB'
+      }
+    ]
   }
-  
-  resource appsSubnet 'subnets' existing = {
-    name:appSubnetName
+}
+
+resource appsSubnet 'Microsoft.Network/virtualNetworks/subnets@2022-05-01' = {
+  name: appSubnetName
+  parent: virtualNetwork
+  properties: {
+    addressPrefix: '10.0.2.0/23'
   }
 }
 
