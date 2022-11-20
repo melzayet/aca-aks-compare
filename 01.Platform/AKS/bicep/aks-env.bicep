@@ -68,7 +68,6 @@ resource aksCluster 'Microsoft.ContainerService/managedClusters@2022-09-02-previ
       dockerBridgeCidr: '172.17.0.1/16'     
       loadBalancerSku:'standard'       
       networkPlugin: 'azure'
-      networkPluginMode: 'Overlay'
       networkPolicy:'calico'
       outboundType:'loadBalancer'    
       serviceCidr: '192.168.100.0/24'
