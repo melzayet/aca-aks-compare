@@ -71,7 +71,7 @@ resource aksCluster 'Microsoft.ContainerService/managedClusters@2022-09-02-previ
       networkPluginMode: 'Overlay'
       networkPolicy:'calico'
       outboundType:'loadBalancer'
-      podCidr: '10.0.2.0/24'      
+      podCidr: '10.0.3.0/24'      
       serviceCidr: '192.168.100.0/24'
     }
     oidcIssuerProfile: {
