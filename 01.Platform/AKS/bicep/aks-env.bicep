@@ -1,5 +1,6 @@
 param location string = resourceGroup().location
 param keyVaultName string = 'cn-kv'
+param aksClusterName string = 'aks-demo'
 //principal id and object id are used interchangeably
 param appIdentityPrincipalId string
 param appIdentityclientId string
@@ -12,7 +13,7 @@ var databaseName = 'todoapp'
 var containerName = 'tasks'
 
 resource aksCluster 'Microsoft.ContainerService/managedClusters@2022-09-02-preview' = {
-  name: 'aks-demo'
+  name: aksClusterName
   location: location
   sku: {
     name: 'Basic'
@@ -29,7 +30,8 @@ resource aksCluster 'Microsoft.ContainerService/managedClusters@2022-09-02-previ
       enableAzureRBAC: true
       managed: true
       tenantID: tenant().tenantId
-    }    
+    }
+    dnsPrefix: aksClusterName
     agentPoolProfiles: [
       {
         availabilityZones: [
