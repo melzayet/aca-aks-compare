@@ -34,7 +34,7 @@ jobs:
         with:
           subscriptionId: ${{ secrets.SUBSCRIPTION_ID }}
           resourceGroupName: ${{ secrets.AKS_RG }}
-          template: ./01.Platform/AKS/bicep/aks-env.bicep
+          template: 01.Platform/AKS/bicep/aks-env.bicep
           parameters: 'appIdentityclientId= ${{ secrets.APP_IDENTITY_CLIENT_ID }} appIdentityPrincipalId=${{ secrets.APP_IDENTITY_PRINCIPAL_ID }} adminGroupObjectId=${{ secrets.AKS_ADMIN_GROUP_ID }}'
           failOnStdErr: true'
       
