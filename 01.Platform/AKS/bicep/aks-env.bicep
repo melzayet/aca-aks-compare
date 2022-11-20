@@ -51,7 +51,7 @@ resource aksCluster 'Microsoft.ContainerService/managedClusters@2022-09-02-previ
         upgradeSettings: {
           maxSurge: '33%'
         }
-        vmSize: ''
+        vmSize: 'standard_b2ms'
         vnetSubnetID: infraSubnet.id
       }
     ]
