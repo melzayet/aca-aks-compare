@@ -67,15 +67,15 @@ resource aksCluster 'Microsoft.ContainerService/managedClusters@2022-09-02-previ
     enableRBAC: true        
     kubernetesVersion: '1.24.6'    
     networkProfile: {
-      dnsServiceIP: 'string'
-      dockerBridgeCidr: 'string'     
+      dnsServiceIP: '192.168.100.10'
+      dockerBridgeCidr: '172.17.0.1/16'     
       loadBalancerSku:'standard'       
       networkPlugin: 'azure'
       networkPluginMode: 'Overlay'
       networkPolicy:'calico'
       outboundType:'loadBalancer'
-      podCidr: 'string'      
-      serviceCidr: 'string'
+      podCidr: '10.0.2.0/24'      
+      serviceCidr: '192.168.100.0/24'
     }
     oidcIssuerProfile: {
       enabled: true
