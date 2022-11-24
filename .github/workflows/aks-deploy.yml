@@ -30,9 +30,12 @@ jobs:
       - name: 'Az CLI login'
         uses: azure/login@v1
         with:
-          client-id: ${{ secrets.DEPLOY_IDENTITY_CLIENT_ID }}
-          tenant-id: ${{ secrets.TENANT_ID }}
-          subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
+          client-id: f842dc96-b461-4daf-860f-c7dfef1000a4
+          #${{ secrets.DEPLOY_IDENTITY_CLIENT_ID }}
+          tenant-id: 16b3c013-d300-468d-ac64-7eda0820b6d3
+          #${{ secrets.TENANT_ID }}
+          subscription-id: a3f7b153-1afb-460c-925e-115adbd86dcc
+          #${{ secrets.SUBSCRIPTION_ID }}
 
       - name: Deploy AKS Bicep
         uses: azure/CLI@v1
