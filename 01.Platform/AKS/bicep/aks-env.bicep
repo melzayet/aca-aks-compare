@@ -120,10 +120,11 @@ resource appsSubnet 'Microsoft.Network/virtualNetworks/subnets@2022-05-01' = {
 }
 
 resource keyVault 'Microsoft.KeyVault/vaults@2019-09-01' = {
-  name: '${keyVaultNamePrefix}-${uniqueSuffix}'
+  name: 'kv-${keyVaultNamePrefix}-${uniqueSuffix}'
   location: location
   properties: {
     enabledForTemplateDeployment: true
+    enableSoftDelete: false
     tenantId: tenant().tenantId
     accessPolicies: [
     ]
