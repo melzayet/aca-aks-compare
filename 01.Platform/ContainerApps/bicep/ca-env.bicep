@@ -7,6 +7,112 @@ var appSubnetName = 'apps-subnet'
 var infraSubnetName = 'infra-subnet'
 
 
+var uniqueSuffix = substring(uniqueString(resourceGroup().id), 0, 4)
+
+resource storage 'Microsoft.Storage/storageAccounts@2021-09-01' = {
+  name: replace('${uniqueSuffix}sa', '-', '')
+  location: location
+  sku: {
+    name: 'Standard_LRS'
+  }
+  kind: 'StorageV2'
+  properties: {
+    accessTier: 'Hot'
+    minimumTlsVersion: 'TLS1_2'
+    supportsHttpsTrafficOnly: true
+  }
+}
+
+var blobContainerName = 'dotnet-data-protection'
+
+resource storageAccount_container 'Microsoft.Storage/storageAccounts/blobServices/containers@2021-02-01' = {
+  name: '${storage.name}/default/${blobContainerName}'
+}
+
+resource cosmosAccount 'Microsoft.DocumentDB/databaseAccounts@2022-05-15' = {
+  name: toLower('${uniqueSuffix}-todo')
+  location: location
+  kind: 'GlobalDocumentDB'
+  properties: {
+    consistencyPolicy: {
+      defaultConsistencyLevel: 'Eventual'
+    }
+    locations: [
+      {
+        locationName: location
+        failoverPriority: 0
+        isZoneRedundant: false
+      }
+    ]
+    isVirtualNetworkFilterEnabled: true
+    capabilities: [
+      {
+        name: 'EnableServerless'
+      }
+    ]
+    virtualNetworkRules: [
+      {
+        id: infraSubnet.id
+        ignoreMissingVNetServiceEndpoint: false
+      }
+    ]
+    databaseAccountOfferType: 'Standard'
+  }
+}
+
+
+@description('This is the built-in Contributor role. See https://docs.microsoft.com/azure/role-based-access-control/built-in-roles#contributor')
+resource storageContributorRoleDefinition 'Microsoft.Authorization/roleDefinitions@2018-01-01-preview' existing = {  
+  name: 'ba92f5b4-2d11-453d-a403-e96b0029c9fe'
+  scope: storage
+}
+
+resource userAssignedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2022-01-31-preview' = {
+  name: '${uniqueSuffix}-mi'
+  location: location  
+}
+
+resource storageRoleAssignment 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = {
+  scope: storage
+  name:guid(storage.id)
+  properties: {
+    roleDefinitionId: storageContributorRoleDefinition.id
+    principalId: userAssignedIdentity.properties.principalId
+    principalType:'ServicePrincipal'
+  }
+}
+
+resource cosmosRBAC 'Microsoft.DocumentDB/databaseAccounts/sqlRoleDefinitions@2021-05-15' = {
+  name: '736180af-7fbc-4c7f-9004-22735173c1c3'
+  parent: cosmosAccount
+  properties: {
+    assignableScopes: [
+     cosmosAccount.id
+    ]
+    permissions: [
+      {
+        dataActions: [
+        'Microsoft.DocumentDB/databaseAccounts/readMetadata'
+        'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers/*'
+        'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers/items/*'
+        ]        
+      }
+    ]
+    roleName: '${uniqueSuffix}-cosmos-rbac'
+    type: 'CustomRole'
+  }
+}
+
+resource cosmosRoleAssignment 'Microsoft.DocumentDB/databaseAccounts/sqlRoleAssignments@2021-05-15' = {
+  name: '736180af-7fbc-4c7f-9004-22735173c1c4'
+  parent: cosmosAccount
+  properties: {
+    principalId: userAssignedIdentity.properties.principalId
+    roleDefinitionId: cosmosRBAC.id
+    scope: cosmosAccount.id
+  }
+}
+
 resource virtualNetwork 'Microsoft.Network/virtualNetworks@2019-11-01' = {
   name: 'aca-devtest-vnet'
   location: location

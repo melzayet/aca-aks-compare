@@ -1,65 +1,12 @@
 param containerAppName string = 'todo-aca-cosmos'
-param infraSubnetName string = 'infra-subnet'
 param containerAppsEnvName string
 param location string = resourceGroup().location
-
-var uniqueSuffix = substring(uniqueString(resourceGroup().id), 0, 4)
+param cosmosAccountName string
 var databaseName = 'todoapp'
 var containerName = 'tasks'
 
-resource storage 'Microsoft.Storage/storageAccounts@2021-09-01' = {
-  name: replace('${uniqueSuffix}sa', '-', '')
-  location: location
-  sku: {
-    name: 'Standard_LRS'
-  }
-  kind: 'StorageV2'
-  properties: {
-    accessTier: 'Hot'
-    minimumTlsVersion: 'TLS1_2'
-    supportsHttpsTrafficOnly: true
-  }
-}
-
-var blobContainerName = 'dotnet-data-protection'
-
-resource storageAccount_container 'Microsoft.Storage/storageAccounts/blobServices/containers@2021-02-01' = {
-  name: '${storage.name}/default/${blobContainerName}'
-}
-
-resource infraSubnet 'Microsoft.Network/virtualNetworks/subnets@2022-05-01' existing = {
-  name: infraSubnetName
-}
-
-resource cosmosAccount 'Microsoft.DocumentDB/databaseAccounts@2022-05-15' = {
-  name: toLower('${uniqueSuffix}-todo')
-  location: location
-  kind: 'GlobalDocumentDB'
-  properties: {
-    consistencyPolicy: {
-      defaultConsistencyLevel: 'Eventual'
-    }
-    locations: [
-      {
-        locationName: location
-        failoverPriority: 0
-        isZoneRedundant: false
-      }
-    ]
-    isVirtualNetworkFilterEnabled: true
-    capabilities: [
-      {
-        name: 'EnableServerless'
-      }
-    ]
-    virtualNetworkRules: [
-      {
-        id: infraSubnet.id
-        ignoreMissingVNetServiceEndpoint: false
-      }
-    ]
-    databaseAccountOfferType: 'Standard'
-  }
+resource cosmosAccount 'Microsoft.DocumentDB/databaseAccounts@2022-05-15' existing = {
+  name: cosmosAccountName
 }
 
 resource database 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases@2022-05-15' = {
@@ -71,7 +18,6 @@ resource database 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases@2022-05-15
     }
   }
 }
-
 resource container 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers@2022-05-15' = {
   parent: database
   name: containerName
@@ -89,58 +35,6 @@ resource container 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/container
 }
 resource containerAppsEnv  'Microsoft.App/managedEnvironments@2022-06-01-preview' existing = {
   name: containerAppsEnvName
-}
-
-@description('This is the built-in Contributor role. See https://docs.microsoft.com/azure/role-based-access-control/built-in-roles#contributor')
-resource storageContributorRoleDefinition 'Microsoft.Authorization/roleDefinitions@2018-01-01-preview' existing = {  
-  name: 'ba92f5b4-2d11-453d-a403-e96b0029c9fe'
-  scope: storage
-}
-
-resource userAssignedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2022-01-31-preview' = {
-  name: '${uniqueSuffix}-mi'
-  location: location  
-}
-
-resource storageRoleAssignment 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = {
-  scope: storage
-  name:guid(storage.id)
-  properties: {
-    roleDefinitionId: storageContributorRoleDefinition.id
-    principalId: userAssignedIdentity.properties.principalId
-    principalType:'ServicePrincipal'
-  }
-}
-
-resource cosmosRBAC 'Microsoft.DocumentDB/databaseAccounts/sqlRoleDefinitions@2021-05-15' = {
-  name: '736180af-7fbc-4c7f-9004-22735173c1c3'
-  parent: cosmosAccount
-  properties: {
-    assignableScopes: [
-     cosmosAccount.id
-    ]
-    permissions: [
-      {
-        dataActions: [
-        'Microsoft.DocumentDB/databaseAccounts/readMetadata'
-        'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers/*'
-        'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers/items/*'
-        ]        
-      }
-    ]
-    roleName: '${uniqueSuffix}-cosmos-rbac'
-    type: 'CustomRole'
-  }
-}
-
-resource cosmosRoleAssignment 'Microsoft.DocumentDB/databaseAccounts/sqlRoleAssignments@2021-05-15' = {
-  name: '736180af-7fbc-4c7f-9004-22735173c1c4'
-  parent: cosmosAccount
-  properties: {
-    principalId: userAssignedIdentity.properties.principalId
-    roleDefinitionId: cosmosRBAC.id
-    scope: cosmosAccount.id
-  }
 }
 
 resource containerAppTodoAPI 'Microsoft.App/containerApps@2022-06-01-preview' ={
