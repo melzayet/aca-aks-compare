@@ -192,6 +192,7 @@ resource cosmosAccount 'Microsoft.DocumentDB/databaseAccounts@2022-05-15' = {
     consistencyPolicy: {
       defaultConsistencyLevel: 'Eventual'
     }
+    isVirtualNetworkFilterEnabled: true
     locations: [
       {
         locationName: location

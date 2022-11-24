@@ -46,6 +46,7 @@ resource cosmosAccount 'Microsoft.DocumentDB/databaseAccounts@2022-05-15' = {
         isZoneRedundant: false
       }
     ]
+    isVirtualNetworkFilterEnabled: true
     capabilities: [
       {
         name: 'EnableServerless'
