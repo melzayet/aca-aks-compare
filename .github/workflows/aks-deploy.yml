@@ -8,7 +8,7 @@ on:
       [ main ]
 
     paths:
-      - "/Users/mahmoudelzayet/mbp/demo/azure-cn-depicted/01.Platform/AKS/**"
+      - "01.Platform/AKS/**"
       - ".github/workflows/aks-deploy.yml"
 
 

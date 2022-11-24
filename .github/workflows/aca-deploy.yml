@@ -8,7 +8,7 @@ on:
       [ main ]
     
     paths:
-      - "/Users/mahmoudelzayet/mbp/demo/azure-cn-depicted/01.Platform/Container Apps/**"
+      - "01.Platform/ContainerApps/**"
       - ".github/workflows/aca-deploy.yml"
 
   # Allow manually trigger 
@@ -38,7 +38,7 @@ jobs:
         with:
           azcliversion: 2.41.0
           inlineScript: |
-            az deployment group create -n aca-deploy -g ${{ secrets.ACA_RG }} --template-file 01.Platform/Container Apps/bicep/ca-env.bicep --parameters containerAppsEnvName=${{ secrets.ACA_ENV_NAME }}
+            az deployment group create -n aca-deploy -g ${{ secrets.ACA_RG }} --template-file 01.Platform/ContainerApps/bicep/ca-env.bicep --parameters containerAppsEnvName=${{ secrets.ACA_ENV_NAME }}
     
       
       
