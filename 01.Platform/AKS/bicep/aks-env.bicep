@@ -1,5 +1,5 @@
 param location string = resourceGroup().location
-param keyVaultName string = 'cn-kv-maelzaye'
+param keyVaultNamePrefix string = 'cn-kv'
 param aksClusterName string = 'aks-demo'
 //principal id and object id are used interchangeably
 param appIdentityPrincipalId string
@@ -120,7 +120,7 @@ resource appsSubnet 'Microsoft.Network/virtualNetworks/subnets@2022-05-01' = {
 }
 
 resource keyVault 'Microsoft.KeyVault/vaults@2019-09-01' = {
-  name: keyVaultName
+  name: '${keyVaultNamePrefix}-${uniqueSuffix}'
   location: location
   properties: {
     enabledForTemplateDeployment: true

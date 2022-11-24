@@ -1,4 +1,4 @@
-name: Trigger auto deployment for AKS
+name: Trigger auto deployment for Azure Container Apps
 
 # When this action will be executed
 on:
@@ -6,11 +6,10 @@ on:
   push:
     branches: 
       [ main ]
-
+    
     paths:
-      - "/Users/mahmoudelzayet/mbp/demo/azure-cn-depicted/01.Platform/AKS/**"
-      - ".github/workflows/aks-deploy.yml"
-
+      - "/Users/mahmoudelzayet/mbp/demo/azure-cn-depicted/01.Platform/Container Apps/**"
+      - ".github/workflows/aca-deploy.yml"
 
   # Allow manually trigger 
   workflow_dispatch:      
@@ -34,9 +33,12 @@ jobs:
           tenant-id: ${{ secrets.TENANT_ID }}
           subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
 
-      - name: Deploy AKS Bicep
+      - name: Deploy ACA Bicep
         uses: azure/CLI@v1
         with:
           azcliversion: 2.41.0
           inlineScript: |
-            az deployment group create -n aks-deploy -g ${{ secrets.AKS_RG }} --template-file 01.Platform/AKS/bicep/aks-env.bicep --parameters appIdentityclientId=${{ secrets.APP_IDENTITY_CLIENT_ID }} appIdentityPrincipalId=${{ secrets.APP_IDENTITY_PRINCIPAL_ID }} adminGroupObjectId=${{ secrets.AKS_ADMIN_GROUP_ID }}
+            az deployment group create -n aca-deploy -g ${{ secrets.ACA_RG }} --template-file 01.Platform/Container Apps/bicep/ca-env.bicep --parameters containerAppsEnvName=${{ secrets.ACA_ENV_NAME }}
+    
+      
+      
