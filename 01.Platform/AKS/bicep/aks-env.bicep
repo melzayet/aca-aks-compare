@@ -84,7 +84,7 @@ resource aksCluster 'Microsoft.ContainerService/managedClusters@2022-09-02-previ
 }
 
 resource virtualNetwork 'Microsoft.Network/virtualNetworks@2019-11-01' = {
-  name: 'aca-devtest-vnet'
+  name: 'aks-devtest-vnet'
   location: location
   properties: {
     addressSpace: {
