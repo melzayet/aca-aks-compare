@@ -40,4 +40,4 @@ jobs:
         with:
           azcliversion: 2.41.0
           inlineScript: |
-            az deployment group create -n aks-deploy -g ${{ secrets.AKS_RG }} --template-file 01.Platform/AKS/bicep/aks-env.bicep --parameters appIdentityclientId=${{ secrets.APP_IDENTITY_CLIENT_ID }} appIdentityPrincipalId=${{ secrets.APP_IDENTITY_PRINCIPAL_ID }} adminGroupObjectId=${{ secrets.AKS_ADMIN_GROUP_ID }}
+            az deployment group create -n aks-deploy -g ${{ secrets.AKS_RG }} -w --template-file 01.Platform/AKS/bicep/aks-env.bicep --parameters appIdentityclientId=${{ secrets.APP_IDENTITY_CLIENT_ID }} appIdentityPrincipalId=${{ secrets.APP_IDENTITY_PRINCIPAL_ID }} adminGroupObjectId=${{ secrets.AKS_ADMIN_GROUP_ID }}
