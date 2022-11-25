@@ -48,13 +48,13 @@ resource aksCluster 'Microsoft.ContainerService/managedClusters@2022-09-02-previ
         osDiskType:'Managed'
         osSKU:'Ubuntu'
         osType:'Linux'
-        podSubnetID: appsSubnet.id
+        podSubnetID: virtualNetwork::appsSubnet.id
         type: 'VirtualMachineScaleSets'
         upgradeSettings: {
           maxSurge: '33%'
         }
         vmSize: 'standard_b2ms'
-        vnetSubnetID: infraSubnet.id
+        vnetSubnetID: virtualNetwork::infraSubnet.id
       }
     ]  
     autoUpgradeProfile: {
@@ -122,6 +122,13 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2019-11-01' = {
         '10.0.0.0/16'
       ]
     }
+  }
+  resource infraSubnet 'subnets' existing = {
+    name: infraSubnetName
+  }
+
+  resource appsSubnet 'subnets' existing = {
+    name: appSubnetName
   }
 }
 
@@ -214,7 +221,7 @@ resource cosmosAccount 'Microsoft.DocumentDB/databaseAccounts@2022-05-15' = {
     ]
     virtualNetworkRules: [
       {
-        id: infraSubnet.id
+        id: virtualNetwork::infraSubnet.id
         ignoreMissingVNetServiceEndpoint: false
       }
     ]

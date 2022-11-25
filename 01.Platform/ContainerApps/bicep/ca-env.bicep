@@ -5,8 +5,6 @@ param appInsightsName string = '${containerAppsEnvName}-ai'
 
 var appSubnetName = 'apps-subnet'
 var infraSubnetName = 'infra-subnet'
-
-
 var uniqueSuffix = substring(uniqueString(resourceGroup().id), 0, 4)
 
 resource storage 'Microsoft.Storage/storageAccounts@2021-09-01' = {
@@ -52,7 +50,7 @@ resource cosmosAccount 'Microsoft.DocumentDB/databaseAccounts@2022-05-15' = {
     ]
     virtualNetworkRules: [
       {
-        id: infraSubnet.id
+        id: virtualNetwork::infraSubnet.id
         ignoreMissingVNetServiceEndpoint: false
       }
     ]
@@ -153,6 +151,13 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2019-11-01' = {
       }
     ]
   }
+  resource infraSubnet 'subnets' existing = {
+    name: infraSubnetName
+  }
+
+  resource appsSubnet 'subnets' existing = {
+    name: appSubnetName
+  }
 }
 
 
@@ -196,8 +201,8 @@ resource containerAppsEnv 'Microsoft.App/managedEnvironments@2022-06-01-preview'
     }
     zoneRedundant: true
     vnetConfiguration: {
-      infrastructureSubnetId: infraSubnet.id
-      runtimeSubnetId: appsSubnet.id
+      infrastructureSubnetId: virtualNetwork::infraSubnet.id
+      runtimeSubnetId: virtualNetwork::appsSubnet.id
       internal: false
       dockerBridgeCidr: '172.17.0.1/16'
       platformReservedCidr: '192.168.100.0/24'
