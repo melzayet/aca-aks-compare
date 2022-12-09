@@ -1,18 +1,19 @@
-# Azure Cloud Native: Depicted
+# Depicted: Cloud Native on Azure
 
 Get deeper in Cloud Native, one story at a time. This series will use Azure as the cloud platform
 
-## Defining the platform
-<a href="http://www.youtube.com/watch?feature=player_embedded&v=6s109Uwr608
-" target="_blank"><img src="http://img.youtube.com/vi/6s109Uwr608/0.jpg" 
-alt="CNCF Test" /></a>
+## The Infrastructure
 
-Orchestrator/scheduler
-Backing service: Cosmos
-Immutable infra: bicep
-CI/CD: GH Actions
-## Defining the Identities
-## Deploying our app
+First, get the workflow and core implementation steps depicted in your head:
+
+<a href="https://www.youtube.com/watch?v=s6sJ0cZUlV8" target="_blank"><img src="https://img.youtube.com/vi/s6sJ0cZUlV8/0.jpg" alt="Ep.1: Infrastructure" /></a>
+
+Then, dive deeper. Inspect files, or follow the guidance to try it yourself:
+
+[01.Infrastructure: The follow-up](01.Platform/README.md)
+
+## Deploying to AKS
+## Deploying to Container Apps
 ## Going private
 ## Receiving traffic
 ## Observing
