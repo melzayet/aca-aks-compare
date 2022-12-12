@@ -311,8 +311,8 @@ resource aksRbacAdminRoleAssignment 'Microsoft.Authorization/roleAssignments@202
   name: guid(aksCluster.id, deployIdentityPrincipalId)
   properties: {
     // AKS RBAC Admin
-    roleDefinitionId: '3498e952-d568-435e-9b2c-8d77e338d7f7'
+    roleDefinitionId: resourceId('Microsoft.Authorization/roleDefinitions/', '3498e952-d568-435e-9b2c-8d77e338d7f7')  
     principalId: deployIdentityPrincipalId
-    principalType: 'ServicePrincipal'
+    principalType:'ServicePrincipal'
   }
 }
