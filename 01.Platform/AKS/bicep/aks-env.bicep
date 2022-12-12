@@ -2,6 +2,7 @@ param location string = resourceGroup().location
 param keyVaultNamePrefix string = 'cn-kv'
 param aksClusterName string = 'aks-demo'
 //principal id and object id are used interchangeably
+param deployIdentityPrincipalId string
 param appIdentityPrincipalId string
 param appIdentityclientId string
 param adminGroupObjectId string
@@ -302,5 +303,16 @@ resource cosmosRoleAssignment 'Microsoft.DocumentDB/databaseAccounts/sqlRoleAssi
     principalId: appIdentityPrincipalId
     roleDefinitionId: cosmosRBAC.id
     scope: cosmosAccount.id
+  }
+}
+
+resource aksRbacAdminRoleAssignment 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = {
+  scope: aksCluster
+  name: guid(aksCluster.id, deployIdentityPrincipalId)
+  properties: {
+    // AKS RBAC Admin
+    roleDefinitionId: '3498e952-d568-435e-9b2c-8d77e338d7f7'
+    principalId: deployIdentityPrincipalId
+    principalType: 'ServicePrincipal'
   }
 }
