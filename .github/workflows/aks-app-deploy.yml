@@ -40,8 +40,8 @@ jobs:
         with:
           azcliversion: 2.41.0
           inlineScript: |
-            sudo apt-get upgrade
-            sudo apt-get install helm            
+            apt-get upgrade
+            apt-get install helm            
             helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
             helm repo update
             helm install --debug -f values.yaml ingress-nginx ingress-nginx/ingress-nginx \
