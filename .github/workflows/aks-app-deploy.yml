@@ -36,10 +36,7 @@ jobs:
           subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
       
       - name: Install NGINX
-        uses: azure/CLI@v1
-        with:
-          azcliversion: 2.41.0
-          inlineScript: |
+        run: |
             apt-get upgrade
             apt-get install helm            
             helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
@@ -54,10 +51,7 @@ jobs:
             --set controller.service.annotations."service\.beta\.kubernetes\.io/azure-load-balancer-health-probe-request-path"=/healthz
 
       - name: Install WIF
-        uses: azure/CLI@v1
-        with:
-          azcliversion: 2.41.0
-          inlineScript: |
+        run:  |
             AZURE_TENANT_ID=${{ secrets.TENANT_ID }}
             helm repo add azure-workload-identity https://azure.github.io/azure-workload-identity/charts
             helm repo update
