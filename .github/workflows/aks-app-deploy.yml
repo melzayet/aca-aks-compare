@@ -37,8 +37,13 @@ jobs:
       
       - name: Install NGINX
         run: |
-            apt-get upgrade
-            apt-get install helm            
+            sudo apt-get upgrade
+            sudo apt-get install helm
+            curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+            sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+            kubectl version --client
+            az aks get-credentials -g ${{ secrets.AKS_RG }} -n aks-demo
+            kubelogin convert-kubeconfig -l azurecli
             helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
             helm repo update
             helm install --debug -f values.yaml ingress-nginx ingress-nginx/ingress-nginx \
