@@ -9,7 +9,7 @@ on:
 
     paths:
       - "01.Platform/AKS/**"
-      - ".github/workflows/aks-deploy.yml"
+      - ".github/workflows/aks-cluster-deploy.yml"
 
 
   # Allow manually trigger 

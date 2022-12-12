@@ -1,0 +1,29 @@
+Cloud native infrastructure, is elastic, dynamic, and can evolve quickly. It's important to have automation in place, and allow for repeatable deployment. Let's depict what that means, and how it can be implemented!    
+
+Building cloud-native infrastructure starts by selecting a scheduler, to run our containerized apps. Sometimes called, an orchestrator. It's typically kubernetes-based. On Azure, we have AKS or Container Apps. We will see both services in more depth, in different episodes of this series.    
+
+As we run our apps, we start seeing a need for backing services. For example, Key Vault to store our secrets, or certificates. Storage Accounts to store any blob content. Also a NoSQL database, like Cosmos DB, for persisting our data.  
+
+All these services, will need permissions to be accessed. We'll create a Managed Identity or MI for that.  
+
+To repeat the deployment of these resources, or tweak their configuration, we need to use "Infrastructure as Code" templates. Bicep is used here but it could have been ARM templates or Terraform. Bicep here is offering the scripted, and repeatable aspect for our infrastructure.
+
+To continuosly deploy template changes, we will use GitHub Actions for that. The templates with be stored in GitHub. GitHub will also need the permissions to manage our Azure infrastructure.
+
+Whether we want to upgrade our kubernetes version, add more secrets, or introduce any change; it's all automated now!
+
+How do we implement this workflow?
+
+We start by authoring our Bicep templates. For the sake of learning, we will use both AKS and Container Apps for scheduling. We will also provision our backing services, and the required Managed Identities. Our templates will also create a VNet. We will dive into networking in later episodes. Finally, we should mention that VS Code is one great place to author "Infrastructure as Code" templates. Yet,  there are great other editors out there.
+
+Our infrastructure definition is ready.  We can store it in GitHub.  But we also want to author a GitHub workflow.  It will re-deploy the templates each time we update them.  We will create one workflow for AKS template changes.  We'll create another one for Container Apps.
+
+So does GitHub have the permission to deploy our Bicep templates? Well,not yet. First, we need to create an AAD App Registration. Then using the concept of "Workflow Identity Federation", we will trust our specific GitHub org, repository and branch, to use this registered AAD app.    
+
+OK, but this AAD app has no permissions. That's why we're just about to create a Resource Group, and make this app an owner of it. But why Owner permissions,  and not just a Contributor? Because our templates will need to create identities, and assign permissions. The good thing though, is Owner permission here, is narrowly scoped to this resource group.
+
+Are we ready to deploy our infrastructure?  Nearly there.  But our Bicep templates has many parameters. For example, our subscription ID, resource group name, and more.  These are best stored in GitHub secrets.
+
+Now, we're ready to deploy. All we have to do, is to commit our templates and workflows, into our git repository. The GitHub workflows will kick off shortly after.
+
+A great follow-up to this episode scenario is to inspect in more details the files and instructions in this repository and folder. It will give you a deeper insights to the  implementation details and concepts you might need to learn in more depth. Thanks for watching and stay posted for our next episode.

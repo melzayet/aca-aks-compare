@@ -1,0 +1,146 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todo
+  namespace: todo-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: todo
+  template:
+    metadata:
+      labels:
+        app: todo       
+    spec:
+      serviceAccountName: todoapp-sa
+      automountServiceAccountToken: true
+      tolerations:          
+        - key: "kubernetes.azure.com/scalesetpriority"
+          operator: "Equal"
+          value: "spot"
+          effect: "NoSchedule"
+      containers:
+      - name: todoapp
+        image: "melzayet/todo-api:v0.4"
+        env:
+          - name: CosmosEndpoint
+            value: "https://todo-cosmos-db-escs.documents.azure.com:443/"
+          - name: DataProtectionEndpoint
+            value: "https://tfstatemaelzayenonprod.blob.core.windows.net/dotnet-data-protection/keys"
+          - name: DatabaseName
+            value: "todoapp"
+          - name: ContainerName
+            value: "tasks"
+          - name: AZURE_CLIENT_ID
+            value: "225f47fc-2eff-483e-8645-b471a8a50453"
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: secrets
+          mountPath: /app/secrets
+          readOnly: true
+      volumes:
+      - name: secrets
+        secret:
+          secretName: secret-appsettings
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todo-ui
+  namespace: todo-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: todo-ui
+  template:
+    metadata:
+      labels:
+        app: todo-ui
+    spec:      
+      containers:
+      - name: todoapp
+        image: "melzayet/todo-ui:v0.3"
+        env:
+          - name: apiEndpoint
+            value: "http://ing-maelzaye.westeurope.cloudapp.azure.com/app/todoitems"          
+        ports:
+        - containerPort: 80
+---   
+kind: Service
+apiVersion: v1
+metadata:
+  name: todo
+  namespace: todo-app
+spec:
+  selector:
+    app: todo
+  type: ClusterIP
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-todo-app
+  namespace: todo-app
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      if ($http_myserviceheader) {
+        set $proxy_upstream_name "todo-app-${http_myserviceheader}-80";
+      }
+spec:
+  rules:
+  - host: ing-maelzaye.westeurope.cloudapp.azure.com
+    http:
+      paths:
+      - path: /app(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: todo
+            port:
+              number: 80
+  ingressClassName: nginx
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: todo-ui
+  namespace: todo-app
+spec:
+  selector:
+    app: todo-ui
+  type: ClusterIP
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-todo-ui
+  namespace: todo-app
+  annotations:
+      nginx.ingress.kubernetes.io/rewrite-target: /      
+spec:
+  rules:
+  - host: ing-maelzaye.westeurope.cloudapp.azure.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: todo-ui
+            port:
+              number: 80
+  ingressClassName: nginx

@@ -9,7 +9,7 @@ on:
     
     paths:
       - "01.Platform/ContainerApps/**"
-      - ".github/workflows/aca-deploy.yml"
+      - ".github/workflows/aca-infra-deploy.yml"
 
   # Allow manually trigger 
   workflow_dispatch:      
