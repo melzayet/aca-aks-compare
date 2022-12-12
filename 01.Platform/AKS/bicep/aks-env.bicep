@@ -105,17 +105,7 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2019-11-01' = {
       {
         name: appSubnetName
         properties: {
-          addressPrefix: '10.0.2.0/23'
-          delegations: [
-            {
-              id: ''
-              name: 'string'
-              properties: {
-                serviceName: 'M'
-              }
-              type: 
-            }
-          ]
+          addressPrefix: '10.0.2.0/23'          
           serviceEndpoints: [
             {
               locations: [

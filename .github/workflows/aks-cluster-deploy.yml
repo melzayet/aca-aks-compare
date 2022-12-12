@@ -1,4 +1,4 @@
-name: Trigger auto deployment for AKS
+name: Trigger auto deployment for AKS cluster deployment
 
 # When this action will be executed
 on:
