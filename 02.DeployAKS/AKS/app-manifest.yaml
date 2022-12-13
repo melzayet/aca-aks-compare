@@ -25,17 +25,17 @@ spec:
             valueFrom:
               secretKeyRef:
                 name: miclientid
-                key: MiClientID
+                key: miclientid
           - name: CosmosEndpoint
             valueFrom:
               secretKeyRef:
                 name: cosmosendpoint
-                key: CosmosEndpoint
+                key: cosmosendpoint
           - name: DataProtectionEndpoint
             valueFrom:
               secretKeyRef:
                 name: dataprotectionendpoint
-                key: DataProtectionEndpoint
+                key: dataprotectionendpoint
           - name: DatabaseName
             value: "todoapp"
           - name: ContainerName

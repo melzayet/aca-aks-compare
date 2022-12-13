@@ -238,7 +238,7 @@ resource cosmosAccount 'Microsoft.DocumentDB/databaseAccounts@2022-05-15' = {
     ]
     virtualNetworkRules: [
       {
-        id: virtualNetwork::infraSubnet.id
+        id: virtualNetwork::appsSubnet.id
         ignoreMissingVNetServiceEndpoint: false
       }
     ]
