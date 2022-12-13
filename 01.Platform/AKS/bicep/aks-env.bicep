@@ -274,7 +274,7 @@ resource container 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/container
 
 resource storageRoleAssignment 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = {
   scope: storage
-  name:guid(storage.id)
+  name:guid(storage.id,storageContributorRoleDefinition.id)
   properties: {
     roleDefinitionId: storageContributorRoleDefinition.id
     principalId: appIdentityPrincipalId
@@ -284,7 +284,7 @@ resource storageRoleAssignment 'Microsoft.Authorization/roleAssignments@2020-04-
 
 resource csiKvRoleAssignment 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = {
   scope: keyVault
-  name:guid(keyVault.id)
+  name:guid(keyVault.id, appIdentityPrincipalId)
   properties: {
     // KV Contributor role
     roleDefinitionId: resourceId('Microsoft.Authorization/roleDefinitions/', 'f25e0fa2-a7c8-4377-a976-54943a77a395')
@@ -316,7 +316,7 @@ resource cosmosRBAC 'Microsoft.DocumentDB/databaseAccounts/sqlRoleDefinitions@20
 }
 
 resource cosmosRoleAssignment 'Microsoft.DocumentDB/databaseAccounts/sqlRoleAssignments@2021-05-15' = {
-  name: '736180af-7fbc-4c7f-9004-22735173c1c4'
+  name: '736180af-7fbc-4c7f-9004-22735173c2c4'
   parent: cosmosAccount
   properties: {
     principalId: appIdentityPrincipalId
