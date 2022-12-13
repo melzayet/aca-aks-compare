@@ -21,6 +21,11 @@ spec:
       - name: todoapp
         image: "melzayet/todo-api:v0.4"
         env:
+          - name: AZURE_CLIENT_ID
+            valueFrom:
+              secretKeyRef:
+                name: miclientid
+                key: MiClientID
           - name: CosmosEndpoint
             valueFrom:
               secretKeyRef:
@@ -34,12 +39,7 @@ spec:
           - name: DatabaseName
             value: "todoapp"
           - name: ContainerName
-            value: "tasks"
-          - name: AZURE_CLIENT_ID
-            valueFrom:
-              secretKeyRef:
-                name: miclientid
-                key: MiClientID
+            value: "tasks" 
         ports:
         - containerPort: 80
         volumeMounts:

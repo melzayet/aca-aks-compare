@@ -120,21 +120,21 @@ jobs:
                     - |
                       objectName: MiClientID
                       objectType: secret          
-                cloudName: "AzurePublicCloud"                         # [OPTIONAL for Azure] if not provided, the Azure environment defaults to AzurePublicCloud
+                cloudName: ""                         # [OPTIONAL for Azure] if not provided, the Azure environment defaults to AzurePublicCloud
               secretObjects:                              # [OPTIONAL] SecretObjects defines the desired state of synced Kubernetes secret objects
                 - data:
-                  - key: CosmosEndpoint                           # data field to populate
+                  - key: cosmosendpoint                           # data field to populate
                     objectName: CosmosEndpoint                        # name of the mounted content to sync; this could be the object name or the object alias
-                  secretName: CosmosEndpoint                     # name of the Kubernetes secret object
+                  secretName: cosmosendpoint                     # name of the Kubernetes secret object
                   type: Opaque                              # type of Kubernetes secret object (for example, Opaque, kubernetes.io/tls)     
                 - data:      
-                  - key: DataProtectionEndpoint
+                  - key: dataprotectionendpoint
                     objectName: DataProtectionEndpoint                        # name of the mounted content to sync; this could be the object name or the object alias
-                  secretName: DataProtectionEndpoint                     # name of the Kubernetes secret object
+                  secretName: dataprotectionendpoint                     # name of the Kubernetes secret object
                   type: Opaque
                 - data:      
-                  - key: MiClientID                           # data field to populate
+                  - key: miclientid                           # data field to populate
                     objectName: MiClientID                        # name of the mounted content to sync; this could be the object name or the object alias
-                  secretName: MiClientID                     # name of the Kubernetes secret object
+                  secretName: miclientid                     # name of the Kubernetes secret object
                   type: Opaque     
             EOF
