@@ -154,6 +154,7 @@ resource keyVault 'Microsoft.KeyVault/vaults@2019-09-01' = {
   properties: {
     enabledForTemplateDeployment: true
     enableSoftDelete: false
+    enableRbacAuthorization: true
     tenantId: tenant().tenantId
     accessPolicies: [      
     ]
