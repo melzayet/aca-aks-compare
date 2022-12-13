@@ -90,18 +90,4 @@ jobs:
               name: ${SERVICE_ACCOUNT_NAME}
               namespace: ${SERVICE_ACCOUNT_NAMESPACE}
             EOF
-            cat <<EOF > params.json
-            {
-              "name": "kubernetes-federated-credential",
-              "issuer": "${SERVICE_ACCOUNT_ISSUER}",
-              "subject": "system:serviceaccount:${SERVICE_ACCOUNT_NAMESPACE}:${SERVICE_ACCOUNT_NAME}",
-              "description": "Kubernetes service account federated credential",
-              "audiences": [
-                "api://AzureADTokenExchange"
-              ]
-            }
-            EOF
-            az ad app federated-credential create --id ${{ secrets.APP_IDENTITY_CLIENT_ID }} --parameters @params.json
-
-
 
