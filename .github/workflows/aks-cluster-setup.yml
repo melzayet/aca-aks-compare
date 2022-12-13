@@ -95,7 +95,7 @@ jobs:
               name: ${SERVICE_ACCOUNT_NAME}
               namespace: ${SERVICE_ACCOUNT_NAMESPACE}
             EOF
-            cat <<EOF | kubectl apply -f - 
+            cat <<EOF | kubectl apply -f -        
             apiVersion: secrets-store.csi.x-k8s.io/v1
             kind: SecretProviderClass
             metadata:
@@ -106,10 +106,10 @@ jobs:
               parameters:
                 usePodIdentity: "false"
                 useVMManagedIdentity: "false"          
-                clientID: "cb341cc5-0813-4291-8675-ac55c89dcb82" # Setting this to use workload identity
-                tenantId: "16b3c013-d300-468d-ac64-7eda0820b6d3"       # The tenant ID of the key vault
-                keyvaultName: akv-cn-kv-qp24      # Set to the name of your key vault
-                cloudName: ""                         # [OPTIONAL for Azure] if not provided, the Azure environment defaults to AzurePublicCloud
+                clientID: "${{ secrets.APP_IDENTITY_CLIENT_ID }}" # Setting this to use workload identity
+                tenantId: "${{ secrets.TENANT_ID }}"        # The tenant ID of the key vault
+                keyvaultName: ${{ secrets.KV_NAME }}       # Set to the name of your key vault
+                cloudName: "AzurePublicCloud"                         # [OPTIONAL for Azure] if not provided, the Azure environment defaults to AzurePublicCloud
               secretObjects:                              # [OPTIONAL] SecretObjects defines the desired state of synced Kubernetes secret objects
                 - data:
                   - key: CosmosEndpoint                           # data field to populate
@@ -125,5 +125,5 @@ jobs:
                   - key: MiClientID                           # data field to populate
                     objectName: MiClientID                        # name of the mounted content to sync; this could be the object name or the object alias
                   secretName: MiClientID                     # name of the Kubernetes secret object
-                  type: Opaque                                                                                                            
+                  type: Opaque     
             EOF
