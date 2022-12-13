@@ -24,12 +24,12 @@ spec:
           - name: CosmosEndpoint
             valueFrom:
               secretKeyRef:
-                name: CosmosEndpoint
+                name: cosmosendpoint
                 key: CosmosEndpoint
           - name: DataProtectionEndpoint
             valueFrom:
               secretKeyRef:
-                name: DataProtectionEndpoint
+                name: dataprotectionendpoint
                 key: DataProtectionEndpoint
           - name: DatabaseName
             value: "todoapp"
@@ -38,7 +38,7 @@ spec:
           - name: AZURE_CLIENT_ID
             valueFrom:
               secretKeyRef:
-                name: MiClientID
+                name: miclientid
                 key: MiClientID
         ports:
         - containerPort: 80
@@ -52,7 +52,7 @@ spec:
             driver: secrets-store.csi.k8s.io
             readOnly: true
             volumeAttributes:
-              secretProviderClass: "azure-sync"
+              secretProviderClass: "azure-kvname-workload-identity"
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -74,7 +74,7 @@ spec:
         image: "melzayet/todo-ui:v0.3"
         env:
           - name: apiEndpoint
-            value: "http://ing-maelzaye.westeurope.cloudapp.azure.com/app/todoitems"          
+            value: "http://ing-maelzaye.westeurope.cloudapp.azure.com/app/todoitems"
         ports:
         - containerPort: 80
 ---   
