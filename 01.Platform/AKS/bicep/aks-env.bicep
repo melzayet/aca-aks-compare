@@ -149,6 +149,7 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2019-11-01' = {
 }
 
 resource keyVault 'Microsoft.KeyVault/vaults@2019-09-01' = {
+  dependsOn: [aksCluster]
   name: 'akv-${keyVaultNamePrefix}-${uniqueSuffix}'
   location: location
   properties: {
@@ -157,7 +158,7 @@ resource keyVault 'Microsoft.KeyVault/vaults@2019-09-01' = {
     tenantId: tenant().tenantId
     accessPolicies: [
       {
-        objectId: aksCluster.identity.userAssignedIdentities['azurekeyvaultsecretsprovider-${aksClusterName}'].principalId
+        objectId: kvUserAssignedIdentity.id
         tenantId: tenant().tenantId
         permissions: {
           secrets: [
@@ -174,6 +175,11 @@ resource keyVault 'Microsoft.KeyVault/vaults@2019-09-01' = {
       family: 'A'
     }
   }
+}
+
+
+resource kvUserAssignedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2022-01-31-preview' existing = {
+  name: 'azurekeyvaultsecretsprovider-${aksClusterName}'
 }
 
 resource keyVaultSecretCosmos 'Microsoft.KeyVault/vaults/secrets@2019-09-01' = {
