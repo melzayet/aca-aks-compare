@@ -1,4 +1,5 @@
 param location string = resourceGroup().location
+param resourceGroupName string = resourceGroup().name
 param keyVaultNamePrefix string = 'cn-kv'
 param aksClusterName string = 'aks-demo'
 //principal id and object id are used interchangeably
@@ -149,7 +150,6 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2019-11-01' = {
 }
 
 resource keyVault 'Microsoft.KeyVault/vaults@2019-09-01' = {
-  dependsOn: [aksCluster]
   name: 'akv-${keyVaultNamePrefix}-${uniqueSuffix}'
   location: location
   properties: {
@@ -180,7 +180,7 @@ resource keyVault 'Microsoft.KeyVault/vaults@2019-09-01' = {
 
 resource kvUserAssignedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2022-01-31-preview' existing = {
   name: 'azurekeyvaultsecretsprovider-${aksClusterName}'
-  scope: resourceGroup(aksCluster.properties.nodeResourceGroup)
+  scope: resourceGroup('MC_${resourceGroupName}_${aksClusterName}_${location}')
 }
 
 resource keyVaultSecretCosmos 'Microsoft.KeyVault/vaults/secrets@2019-09-01' = {
