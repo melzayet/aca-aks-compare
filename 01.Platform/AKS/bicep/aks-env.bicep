@@ -158,7 +158,7 @@ resource keyVault 'Microsoft.KeyVault/vaults@2019-09-01' = {
     tenantId: tenant().tenantId
     accessPolicies: [
       {
-        objectId: kvUserAssignedIdentity.id
+        objectId: kvUserAssignedIdentity.properties.principalId
         tenantId: tenant().tenantId
         permissions: {
           secrets: [
