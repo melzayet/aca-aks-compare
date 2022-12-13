@@ -9,7 +9,7 @@ on:
 
     paths:
       - "01.DeployAKS/AKS/**"
-      - ".github/workflows/aks-app-deploy.yml"
+      - ".github/workflows/aks-cluster-setup.yml"
 
 
   # Allow manually trigger 
@@ -35,7 +35,7 @@ jobs:
           tenant-id: ${{ secrets.TENANT_ID }}
           subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
       
-      - name: Install NGINX
+      - name: Install Dependencies
         run: |            
             wget https://get.helm.sh/helm-v3.9.3-linux-amd64.tar.gz
             tar xvf helm-v3.9.3-linux-amd64.tar.gz
@@ -61,9 +61,6 @@ jobs:
             --set controller.metrics.enabled=true \
             --set controller.nodeSelector."kubernetes\.io/os"=linux \
             --set controller.service.annotations."service\.beta\.kubernetes\.io/azure-load-balancer-health-probe-request-path"=/healthz
-
-      - name: Install WIF
-        run:  |
             AZURE_TENANT_ID=${{ secrets.TENANT_ID }}
             helm repo add azure-workload-identity https://azure.github.io/azure-workload-identity/charts
             helm repo update
