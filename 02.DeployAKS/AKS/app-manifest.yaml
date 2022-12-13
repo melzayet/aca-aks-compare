@@ -1,3 +1,4 @@
+
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -21,17 +22,37 @@ spec:
         image: "melzayet/todo-api:v0.4"
         env:
           - name: CosmosEndpoint
-            value: "https://todo-cosmos-db-escs.documents.azure.com:443/"
+            valueFrom:
+              secretKeyRef:
+                name: CosmosEndpoint
+                key: CosmosEndpoint
           - name: DataProtectionEndpoint
-            value: "https://tfstatemaelzayenonprod.blob.core.windows.net/dotnet-data-protection/keys"
+            valueFrom:
+              secretKeyRef:
+                name: DataProtectionEndpoint
+                key: DataProtectionEndpoint
           - name: DatabaseName
             value: "todoapp"
           - name: ContainerName
             value: "tasks"
           - name: AZURE_CLIENT_ID
-            value: "225f47fc-2eff-483e-8645-b471a8a50453"
+            valueFrom:
+              secretKeyRef:
+                name: MiClientID
+                key: MiClientID
         ports:
         - containerPort: 80
+        volumeMounts:
+        - name: secrets-store01-inline
+          mountPath: "/mnt/secrets-store"
+          readOnly: true          
+      volumes:
+        - name: secrets-store01-inline
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: "azure-sync"
 ---
 apiVersion: apps/v1
 kind: Deployment
