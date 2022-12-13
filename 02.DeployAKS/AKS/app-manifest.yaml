@@ -77,6 +77,17 @@ spec:
             value: "http://ing-maelzaye.westeurope.cloudapp.azure.com/app/todoitems"
         ports:
         - containerPort: 80
+        volumeMounts:
+        - name: secrets-store01-inline
+          mountPath: "/mnt/secrets-store"
+          readOnly: true          
+      volumes:
+        - name: secrets-store01-inline
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: "azure-kvname-workload-identity"        
 ---   
 kind: Service
 apiVersion: v1
