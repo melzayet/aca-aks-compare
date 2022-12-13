@@ -180,6 +180,7 @@ resource keyVault 'Microsoft.KeyVault/vaults@2019-09-01' = {
 
 resource kvUserAssignedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2022-01-31-preview' existing = {
   name: 'azurekeyvaultsecretsprovider-${aksClusterName}'
+  scope: resourceGroup(aksCluster.properties.nodeResourceGroup)
 }
 
 resource keyVaultSecretCosmos 'Microsoft.KeyVault/vaults/secrets@2019-09-01' = {
