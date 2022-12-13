@@ -1,0 +1,51 @@
+name: Trigger auto deployment for AKS app deployment
+
+# When this action will be executed
+on:
+  # Automatically trigger it when detected changes in repo
+  push:
+    branches: 
+      [ main ]
+
+    paths:
+      - "01.DeployAKS/AKS/**"
+      - ".github/workflows/aks-app-deploy.yml"
+
+
+  # Allow manually trigger 
+  workflow_dispatch:      
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout to the branch
+        uses: actions/checkout@v3
+      
+      
+      - name: 'Az CLI login'
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.DEPLOY_IDENTITY_CLIENT_ID }}
+          tenant-id: ${{ secrets.TENANT_ID }}
+          subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
+      
+      - name: Install kubectl and kubelogin
+        run: |                        
+            curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+            sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+            kubectl version --client
+            wget https://github.com/Azure/kubelogin/releases/download/v0.0.24/kubelogin-linux-amd64.zip
+            unzip kubelogin-linux-amd64.zip
+            sudo mv bin/linux_amd64/kubelogin /usr/bin
+            az aks get-credentials -g ${{ secrets.AKS_RG }} -n aks-demo
+            kubelogin convert-kubeconfig -l azurecli
+      
+      - name: Deploy App
+        run: |
+          kubectl apply -f 02.DeployAKS/AKS/app-manifest.yaml

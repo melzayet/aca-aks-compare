@@ -16,11 +16,6 @@ spec:
     spec:
       serviceAccountName: todoapp-sa
       automountServiceAccountToken: true
-      tolerations:          
-        - key: "kubernetes.azure.com/scalesetpriority"
-          operator: "Equal"
-          value: "spot"
-          effect: "NoSchedule"
       containers:
       - name: todoapp
         image: "melzayet/todo-api:v0.4"
@@ -92,10 +87,6 @@ metadata:
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /$2
     nginx.ingress.kubernetes.io/use-regex: "true"
-    nginx.ingress.kubernetes.io/configuration-snippet: |
-      if ($http_myserviceheader) {
-        set $proxy_upstream_name "todo-app-${http_myserviceheader}-80";
-      }
 spec:
   rules:
   - host: ing-maelzaye.westeurope.cloudapp.azure.com

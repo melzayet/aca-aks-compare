@@ -1,4 +1,4 @@
-name: Trigger auto deployment for AKS app deployment
+name: Trigger auto deployment for AKS cluster setup
 
 # When this action will be executed
 on:
@@ -61,6 +61,8 @@ jobs:
             --set controller.metrics.enabled=true \
             --set controller.nodeSelector."kubernetes\.io/os"=linux \
             --set controller.service.annotations."service\.beta\.kubernetes\.io/azure-load-balancer-health-probe-request-path"=/healthz
+            --set controller.service.annotations."service\.beta\.kubernetes\.io/azure-dns-label-name"=${{ secrets.APP_DNS_NAME }}
+    
 
       - name: Install WIF
         run: |       
