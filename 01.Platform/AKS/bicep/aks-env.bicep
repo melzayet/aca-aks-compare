@@ -285,10 +285,10 @@ resource storageRoleAssignment 'Microsoft.Authorization/roleAssignments@2020-04-
 
 resource csiKvRoleAssignment 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = {
   scope: keyVault
-  name:guid(keyVault.id, appIdentityPrincipalId)
+  name:guid(keyVault.id, appIdentityPrincipalId, '4633458b-17de-408a-b874-0445c86b69e6')
   properties: {
-    // KV Contributor role
-    roleDefinitionId: resourceId('Microsoft.Authorization/roleDefinitions/', 'f25e0fa2-a7c8-4377-a976-54943a77a395')
+    // KV Secretsuser
+    roleDefinitionId: resourceId('Microsoft.Authorization/roleDefinitions/', '4633458b-17de-408a-b874-0445c86b69e6')
     principalId: appIdentityPrincipalId
     principalType:'ServicePrincipal'
   }
