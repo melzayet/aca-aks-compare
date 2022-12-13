@@ -69,8 +69,10 @@ spec:
       labels:
         app: todo-ui
     spec:      
+      serviceAccountName: todoapp-sa
+      automountServiceAccountToken: true
       containers:
-      - name: todoapp
+      - name: todo-ui
         image: "melzayet/todo-ui:v0.3"
         env:
           - name: apiEndpoint
