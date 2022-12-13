@@ -109,6 +109,17 @@ jobs:
                 clientID: "${{ secrets.APP_IDENTITY_CLIENT_ID }}" # Setting this to use workload identity
                 tenantId: "${{ secrets.TENANT_ID }}"        # The tenant ID of the key vault
                 keyvaultName: ${{ secrets.KV_NAME }}       # Set to the name of your key vault
+                objects:  |
+                  array:
+                    - |
+                      objectName: CosmosEndpoint
+                      objectType: secret              # object types: secret, key, or cert
+                    - |
+                      objectName: DataProtectionEndpoint
+                      objectType: secret
+                    - |
+                      objectName: MiClientID
+                      objectType: secret          
                 cloudName: "AzurePublicCloud"                         # [OPTIONAL for Azure] if not provided, the Azure environment defaults to AzurePublicCloud
               secretObjects:                              # [OPTIONAL] SecretObjects defines the desired state of synced Kubernetes secret objects
                 - data:
