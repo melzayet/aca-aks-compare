@@ -34,7 +34,9 @@ resource aksCluster 'Microsoft.ContainerService/managedClusters@2022-09-02-previ
     }
     addonProfiles: {
       azureKeyvaultSecretsProvider: {
-        enabled: true 
+        enabled: true
+        
+      
       }
     }
     dnsPrefix: aksClusterName
@@ -155,7 +157,7 @@ resource keyVault 'Microsoft.KeyVault/vaults@2019-09-01' = {
     tenantId: tenant().tenantId
     accessPolicies: [
       {
-        objectId: aksCluster.identity.principalId
+        objectId: aksCluster.identity.userAssignedIdentities['azurekeyvaultsecretsprovider-${aksClusterName}'].principalId
         tenantId: tenant().tenantId
         permissions: {
           secrets: [

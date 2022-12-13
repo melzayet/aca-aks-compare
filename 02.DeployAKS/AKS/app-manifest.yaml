@@ -32,14 +32,6 @@ spec:
             value: "225f47fc-2eff-483e-8645-b471a8a50453"
         ports:
         - containerPort: 80
-        volumeMounts:
-        - name: secrets
-          mountPath: /app/secrets
-          readOnly: true
-      volumes:
-      - name: secrets
-        secret:
-          secretName: secret-appsettings
 ---
 apiVersion: apps/v1
 kind: Deployment
