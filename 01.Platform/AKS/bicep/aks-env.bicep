@@ -1,5 +1,4 @@
 param location string = resourceGroup().location
-param resourceGroupName string = resourceGroup().name
 param keyVaultNamePrefix string = 'cn-kv'
 param aksClusterName string = 'aks-demo'
 //principal id and object id are used interchangeably
@@ -156,31 +155,13 @@ resource keyVault 'Microsoft.KeyVault/vaults@2019-09-01' = {
     enabledForTemplateDeployment: true
     enableSoftDelete: false
     tenantId: tenant().tenantId
-    accessPolicies: [
-      {
-        objectId: kvUserAssignedIdentity.properties.principalId
-        tenantId: tenant().tenantId
-        permissions: {
-          secrets: [
-            'list'
-          ]
-          certificates: [
-            'list'
-          ]
-        }
-      }
+    accessPolicies: [      
     ]
     sku: {
       name: 'standard'
       family: 'A'
     }
   }
-}
-
-
-resource kvUserAssignedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2022-01-31-preview' existing = {
-  name: 'azurekeyvaultsecretsprovider-${aksClusterName}'
-  scope: resourceGroup('MC_${resourceGroupName}_${aksClusterName}_${location}')
 }
 
 resource keyVaultSecretCosmos 'Microsoft.KeyVault/vaults/secrets@2019-09-01' = {
@@ -301,6 +282,18 @@ resource storageRoleAssignment 'Microsoft.Authorization/roleAssignments@2020-04-
   }
 }
 
+resource csiKvRoleAssignment 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = {
+  scope: keyVault
+  name:guid(keyVault.id)
+  properties: {
+    // KV Contributor role
+    roleDefinitionId: resourceId('Microsoft.Authorization/roleDefinitions/', 'f25e0fa2-a7c8-4377-a976-54943a77a395')
+    principalId: appIdentityPrincipalId
+    principalType:'ServicePrincipal'
+  }
+}
+
+
 resource cosmosRBAC 'Microsoft.DocumentDB/databaseAccounts/sqlRoleDefinitions@2021-05-15' = {
   name: '736180af-7fbc-4c7f-9004-22735173c1c3'
   parent: cosmosAccount
@@ -331,6 +324,7 @@ resource cosmosRoleAssignment 'Microsoft.DocumentDB/databaseAccounts/sqlRoleAssi
     scope: cosmosAccount.id
   }
 }
+
 
 resource aksRbacAdminRoleAssignment 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = {
   scope: aksCluster
