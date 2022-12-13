@@ -60,7 +60,7 @@ jobs:
             --set controller.replicaCount=2 \
             --set controller.metrics.enabled=true \
             --set controller.nodeSelector."kubernetes\.io/os"=linux \
-            --set controller.service.annotations."service\.beta\.kubernetes\.io/azure-load-balancer-health-probe-request-path"=/healthz
+            --set controller.service.annotations."service\.beta\.kubernetes\.io/azure-load-balancer-health-probe-request-path"=/healthz \
             --set controller.service.annotations."service\.beta\.kubernetes\.io/azure-dns-label-name"=${{ secrets.APP_DNS_NAME }}
     
 
