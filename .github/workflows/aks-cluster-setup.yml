@@ -78,9 +78,13 @@ jobs:
             APPLICATION_OBJECT_ID=${{ secrets.APP_IDENTITY_PRINCIPAL_ID }}
             SERVICE_ACCOUNT_NAMESPACE=todo-app
             SERVICE_ACCOUNT_NAME=todoapp-sa
-            APPLICATION_CLIENT_ID=${{ secrets.APP_IDENTITY_CLIENT_ID }}
-            kubectl create ns todo-app
+            APPLICATION_CLIENT_ID=${{ secrets.APP_IDENTITY_CLIENT_ID }}            
             cat <<EOF | kubectl apply -f -
+            apiVersion: v1
+            kind: Namespace
+            metadata:
+              name: todo-app
+            ---
             apiVersion: v1
             kind: ServiceAccount
             metadata:
