@@ -1,0 +1,45 @@
+name: Trigger auto deployment for Azure Container Apps
+
+# When this action will be executed
+on:
+  # Automatically trigger it when detected changes in repo
+  push:
+    branches: 
+      [ main ]
+    
+    paths:
+      - "03.DeployACA/ContainerApps/**"
+      - ".github/workflows/aca-app-deploy.yml"
+
+  # Allow manually trigger 
+  workflow_dispatch:      
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout to the branch
+        uses: actions/checkout@v3
+      
+      - name: 'Az CLI login'
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.DEPLOY_IDENTITY_CLIENT_ID }}
+          tenant-id: ${{ secrets.TENANT_ID }}
+          subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
+
+      - name: Deploy ACA Bicep
+        uses: azure/CLI@v1
+        with:
+          azcliversion: 2.41.0
+          inlineScript: |
+            az deployment group show -g ${{ secrets.ACA_RG }}  -n aca-deploy --query properties.outputs.cosmosAccountName.value
+            az deployment group create -n aca-app-deploy -g ${{ secrets.ACA_RG }} --template-file 03.DeployACA/ContainerApps/bicep/ca-app.bicep --parameters containerAppsEnvName=${{ secrets.ACA_ENV_NAME }}
+    
+      
+      
