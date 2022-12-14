@@ -1,4 +1,7 @@
 param containerAppName string = 'todo-aca-cosmos'
+param userAssignedIdentityName string
+param userAssignedIdentityClientId string
+param blobContainerName string
 param containerAppsEnvName string
 param location string = resourceGroup().location
 param cosmosAccountName string
@@ -43,7 +46,7 @@ resource containerAppTodoAPI 'Microsoft.App/containerApps@2022-06-01-preview' ={
   identity:{
     type: 'UserAssigned'
     userAssignedIdentities: {
-      '/subscriptions/${subscription().subscriptionId}/resourceGroups/${resourceGroup().name}/providers/Microsoft.ManagedIdentity/userAssignedIdentities/${userAssignedIdentity.name}': {}
+      '/subscriptions/${subscription().subscriptionId}/resourceGroups/${resourceGroup().name}/providers/Microsoft.ManagedIdentity/userAssignedIdentities/${userAssignedIdentityName}': {}
     }
   }
   properties:{
@@ -64,7 +67,7 @@ resource containerAppTodoAPI 'Microsoft.App/containerApps@2022-06-01-preview' ={
         }
         {
           name: 'mi-client-id'
-          value: userAssignedIdentity.properties.clientId
+          value: userAssignedIdentityClientId
         }
       ]
     }

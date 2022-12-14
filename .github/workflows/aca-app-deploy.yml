@@ -1,4 +1,4 @@
-name: Trigger auto deployment for Azure Container Apps
+name: Trigger auto deployment for Azure Container Apps - App Deployment
 
 # When this action will be executed
 on:
@@ -38,8 +38,17 @@ jobs:
         with:
           azcliversion: 2.41.0
           inlineScript: |
-            az deployment group show -g ${{ secrets.ACA_RG }}  -n aca-deploy --query properties.outputs.cosmosAccountName.value
-            az deployment group create -n aca-app-deploy -g ${{ secrets.ACA_RG }} --template-file 03.DeployACA/ContainerApps/bicep/ca-app.bicep --parameters containerAppsEnvName=${{ secrets.ACA_ENV_NAME }}
+            cosmosAccount=`az deployment group show -g ${{ secrets.ACA_RG }}  -n aca-deploy --query properties.outputs.cosmosAccountName.value`
+            blobContainerName=`az deployment group show -g ${{ secrets.ACA_RG }}  -n aca-deploy --query properties.outputs.blobContainerName.value`
+            userAssignedIdentityName=`az deployment group show -g ${{ secrets.ACA_RG }}  -n aca-deploy --query properties.outputs.userAssignedIdentityName.value`
+            userAssignedIdentityClientId=`az deployment group show -g ${{ secrets.ACA_RG }}  -n aca-deploy --query properties.outputs.userAssignedIdentityClientId.value`
+            az deployment group create -n aca-app-deploy -g ${{ secrets.ACA_RG }} --template-file 03.DeployACA/ContainerApps/bicep/ca-app.bicep \
+            --parameters containerAppsEnvName=${{ secrets.ACA_ENV_NAME }} \
+            cosmosAccountName=$cosmosAccount \
+            blobContainerName=$blobContainerName \
+            userAssignedIdentityName=$userAssignedIdentityName \
+            userAssignedIdentityClientId=$userAssignedIdentityClientId
+
     
       
       

@@ -219,3 +219,6 @@ output cappsEnvId string = containerAppsEnv.id
 output cosmosAccountName string = cosmosAccount.name
 output appInsightsInstrumentationKey string = appInsights.properties.InstrumentationKey
 output defaultDomain string = containerAppsEnv.properties.defaultDomain
+output blobContainerName string = blobContainerName
+output userAssignedIdentityName string = userAssignedIdentity.name
+output userAssignedIdentityClientId string = userAssignedIdentity.properties.clientId
