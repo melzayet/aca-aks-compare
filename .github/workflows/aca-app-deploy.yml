@@ -42,12 +42,14 @@ jobs:
             blobContainerName=`az deployment group show -g ${{ secrets.ACA_RG }}  -n aca-deploy --query properties.outputs.blobContainerName.value`
             userAssignedIdentityName=`az deployment group show -g ${{ secrets.ACA_RG }}  -n aca-deploy --query properties.outputs.userAssignedIdentityName.value`
             userAssignedIdentityClientId=`az deployment group show -g ${{ secrets.ACA_RG }}  -n aca-deploy --query properties.outputs.userAssignedIdentityClientId.value`
+            storageAccountName=`az deployment group show -g ${{ secrets.ACA_RG }}  -n aca-deploy --query properties.outputs.storageAccountName.value`
             az deployment group create -n aca-app-deploy -g ${{ secrets.ACA_RG }} --template-file 03.DeployACA/ContainerApps/bicep/ca-app.bicep \
             --parameters containerAppsEnvName=${{ secrets.ACA_ENV_NAME }} \
             cosmosAccountName=$cosmosAccount \
             blobContainerName=$blobContainerName \
             userAssignedIdentityName=$userAssignedIdentityName \
-            userAssignedIdentityClientId=$userAssignedIdentityClientId
+            userAssignedIdentityClientId=$userAssignedIdentityClientId \
+            storageAccountName=$storageAccountName
 
     
       

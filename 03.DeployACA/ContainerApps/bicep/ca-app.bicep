@@ -1,6 +1,7 @@
 param containerAppName string = 'todo-aca-cosmos'
 param userAssignedIdentityName string
 param userAssignedIdentityClientId string
+param storageAccountName string
 param blobContainerName string
 param containerAppsEnvName string
 param location string = resourceGroup().location
@@ -59,7 +60,7 @@ resource containerAppTodoAPI 'Microsoft.App/containerApps@2022-06-01-preview' ={
       secrets: [
         {
           name: 'blob-endpoint'
-          value: 'https://${storage.name}.blob.${environment().suffixes.storage}/${blobContainerName}/keys'
+          value: 'https://${storageAccountName}.blob.${environment().suffixes.storage}/${blobContainerName}/keys'
         }
         {
           name: 'cosmos-endpoint'

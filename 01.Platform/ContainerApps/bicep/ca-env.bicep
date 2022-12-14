@@ -217,6 +217,7 @@ resource containerAppsEnv 'Microsoft.App/managedEnvironments@2022-06-01-preview'
 output name string = containerAppsEnv.name
 output cappsEnvId string = containerAppsEnv.id
 output cosmosAccountName string = cosmosAccount.name
+output storageAccountName string = storage.name
 output appInsightsInstrumentationKey string = appInsights.properties.InstrumentationKey
 output defaultDomain string = containerAppsEnv.properties.defaultDomain
 output blobContainerName string = blobContainerName
