@@ -337,3 +337,7 @@ resource aksRbacAdminRoleAssignment 'Microsoft.Authorization/roleAssignments@202
     principalType:'ServicePrincipal'
   }
 }
+
+output kvName string = keyVault.name
+
+
