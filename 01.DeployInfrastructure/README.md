@@ -1,8 +1,6 @@
 # 1. The Infrastructure: Implementation 
 
 
-<a href="https://www.youtube.com/watch?v=s6sJ0cZUlV8" target="_blank"><img src="../images/infra-implementation.jpg" alt="Ep.1: Infrastructure" /></a>
-
 ## A. Fork this repository
 This will allow you to set secret and run your own workflows. Click [here](https://github.com/melzayet/azure-cn-depicted/fork) to fork.
 

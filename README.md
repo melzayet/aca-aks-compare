@@ -5,9 +5,8 @@ Get deeper in Cloud Native, focusing on one goal at a time. This series will use
 ## GOAL 1: Scripted and Dynamic Infrastructure
 
 
-### Stay sharp on the goal:
-Build scripted and dynamic infrastructure to host the apps
-
+### Understand and stay sharp on the goal:
+Start with the below video:
 <a href="https://www.youtube.com/watch?v=s6sJ0cZUlV8" target="_blank"><img src="images/infra-workflow.jpg" alt="Ep.1: Infrastructure" /></a>
 
 ### Go deeper into these concepts/tools:
