@@ -10,7 +10,7 @@ First, get the workflow and core implementation steps depicted in your head:
 
 Then, dive deeper. Inspect files, or follow the guidance to try it yourself:
 
-[01.Infrastructure: The follow-up](01.Platform/README.md)
+[01.Infrastructure: The follow-up](01.DeployInfrastructure/README.md)
 
 ## Deploying to AKS
 ## Deploying to Container Apps

@@ -14,15 +14,15 @@ Whether we want to upgrade our kubernetes version, add more secrets, or introduc
 
 How do we implement this workflow?
 
-We start by authoring our Bicep templates. For the sake of learning, we will use both AKS and Container Apps for scheduling. We will also provision our backing services, and the required Managed Identities. Our templates will also create a VNet. We will dive into networking in later episodes. Finally, we should mention that VS Code is one great place to author "Infrastructure as Code" templates. Yet,  there are great other editors out there.
+We start by authoring our Bicep templates. Here we're using VS Code, and setting templates to create our scheduler, backing services, identities and more. There are lots of "Infrastructure as Code" templates out there to start from.
 
-Our infrastructure definition is ready.  We can store it in GitHub.  But we also want to author a GitHub workflow.  It will re-deploy the templates each time we update them.  We will create one workflow for AKS template changes.  We'll create another one for Container Apps.
+Our infrastructure definition is ready.  We can store it in GitHub.  But we also want to author a GitHub workflow.  It will re-deploy the infrastructure templates each time we update them.  We will create one workflow for AKS template changes.  We'll create another one for Container Apps.
 
-So does GitHub have the permission to deploy our Bicep templates? Well,not yet. First, we need to create an AAD App Registration. Then using the concept of "Workflow Identity Federation", we will trust our specific GitHub org, repository and branch, to use this registered AAD app.    
+So does GitHub have the permission to deploy our Bicep templates? Well,not yet. First, we need to create an AAD App Registration. Then using the concept of "Workflow Identity Federation", we will trust our specific GitHub org, repository and branch, to use this registered AAD app. I am using the Azure Portal here to create the app, but this could have been automated. Please note that we have also created another AAD app for AKS applications. More on this in coming episodes.
 
-OK, but this AAD app has no permissions. That's why we're just about to create a Resource Group, and make this app an owner of it. But why Owner permissions,  and not just a Contributor? Because our templates will need to create identities, and assign permissions. The good thing though, is Owner permission here, is narrowly scoped to this resource group.
+OK, but this AAD app has no permissions? Yes, that's why we're just about to create a Resource Group, and make this app an owner of it. The Resource Group will be a logical grouping of our infrastructure resources.  But why do we set Owner permissions,  and not just a Contributor? Because our templates will need to create identities, and assign permissions. The good thing though, is Owner permission here, is narrowly scoped to this resource group. We will create another resource group for Container Apps.
 
-Are we ready to deploy our infrastructure?  Nearly there.  But our Bicep templates has many parameters. For example, our subscription ID, resource group name, and more.  These are best stored in GitHub secrets.
+Are we ready to deploy our infrastructure?  Nearly there.  But our Bicep templates have many parameters. For example, our subscription ID, resource group name, and more.  These are best stored as GitHub secrets.
 
 Now, we're ready to deploy. All we have to do, is to commit our templates and workflows, into our git repository. The GitHub workflows will kick off shortly after.
 

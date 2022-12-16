@@ -1,6 +1,11 @@
-Cloud native infrastructure, is elastic, dynamic, and can evolve quickly. It's important to have automation in place, and allow for repeatable deployment. Let's depict what that means, and how it can be implemented!    
+As our application evolves, we want to continusouly and automatically deploy it to our orchestration environment. Let's start with AKS!
 
-Building cloud-native infrastructure starts by selecting a scheduler, to run our containerized apps. Sometimes called, an orchestrator. It's typically kubernetes-based. On Azure, we have AKS or Container Apps. We will see both services in more depth, in different episodes of this series.    
+In the last episode, we were able to build the infrastructure. With one click, we can now deploy, or update the infrastructure. Let's add another GitHub workflow, to deploy to AKS. 
+
+
+
+
+
 
 As we run our apps, we start seeing a need for backing services. For example, Key Vault to store our secrets, or certificates. Storage Accounts to store any blob content. Also a NoSQL database, like Cosmos DB, for persisting our data.  
 
