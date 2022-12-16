@@ -1,4 +1,6 @@
-Cloud native infrastructure, is elastic, dynamic, and can evolve quickly. It's important to have automation in place, and allow for repeatable deployment. Let's depict what that means, and how it can be implemented!    
+To follow a Cloud Native approach, one must start with a strong solid foundation, or infrasructure. We need to build scripted & dynamic infrasructure before we can host our apps.
+
+Let's review a sample architecture for reaching that goal.
 
 Building cloud-native infrastructure starts by selecting a scheduler, to run our containerized apps. Sometimes called, an orchestrator. It's typically kubernetes-based. On Azure, we have AKS or Container Apps. We will see both services in more depth, in different episodes of this series.    
 
@@ -12,18 +14,18 @@ To continuosly deploy template changes, we will use GitHub Actions for that. The
 
 Whether we want to upgrade our kubernetes version, add more secrets, or introduce any change; it's all automated now!
 
-How do we implement this workflow?
+How do we implement this sample architecture?
 
-We start by authoring our Bicep templates. Here we're using VS Code, and setting templates to create our scheduler, backing services, identities and more. There are lots of "Infrastructure as Code" templates out there to start from.
+We start by authoring our Bicep templates. Here we're using VS Code, and setting templates to create our scheduler, backing services, identities, and more. There are lots of "Infrastructure as Code" templates out there, to use a starting point.
 
 Our infrastructure definition is ready.  We can store it in GitHub.  But we also want to author a GitHub workflow.  It will re-deploy the infrastructure templates each time we update them.  We will create one workflow for AKS template changes.  We'll create another one for Container Apps.
 
 So does GitHub have the permission to deploy our Bicep templates? Well,not yet. First, we need to create an AAD App Registration. Then using the concept of "Workflow Identity Federation", we will trust our specific GitHub org, repository and branch, to use this registered AAD app. I am using the Azure Portal here to create the app, but this could have been automated. Please note that we have also created another AAD app for AKS applications. More on this in coming episodes.
 
-OK, but this AAD app has no permissions? Yes, that's why we're just about to create a Resource Group, and make this app an owner of it. The Resource Group will be a logical grouping of our infrastructure resources.  But why do we set Owner permissions,  and not just a Contributor? Because our templates will need to create identities, and assign permissions. The good thing though, is Owner permission here, is narrowly scoped to this resource group. We will create another resource group for Container Apps.
+OK, but this AAD app has no permissions? Yes, that's why we need to create a Resource Group, and make this app an owner of it. The Resource Group will be a logical grouping of our infrastructure resources.  But why do we set Owner permissions,  and not just a Contributor? Because our templates will need to create identities, and assign permissions. The good thing though, is Owner permission here, is narrowly scoped to this resource group. We will create another resource group for Container Apps.
 
 Are we ready to deploy our infrastructure?  Nearly there.  But our Bicep templates have many parameters. For example, our subscription ID, resource group name, and more.  These are best stored as GitHub secrets.
 
 Now, we're ready to deploy. All we have to do, is to commit our templates and workflows, into our git repository. The GitHub workflows will kick off shortly after.
 
-A great follow-up to this episode scenario is to inspect in more details the files and instructions in this repository and folder. It will give you a deeper insights to the  implementation details and concepts you might need to learn in more depth. Thanks for watching and stay posted for our next episode.
+Our infrasructure is now scripted and repeatable. While focused on the this first goal, dive deeper through the below mentioned repository. Thanks for watching and stay posted for our next episode where we install our first app.

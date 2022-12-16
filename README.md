@@ -1,16 +1,22 @@
 # Depicted: Cloud Native on Azure
 
-Get deeper in Cloud Native, one story at a time. This series will use Azure as the cloud platform
+Get deeper in Cloud Native, focusing on one goal at a time. This series will use Azure as the cloud platform
 
-## The Infrastructure
+## GOAL 1: Scripted and Dynamic Infrastructure
 
-First, get the workflow and core implementation steps depicted in your head:
+
+### Stay sharp on the goal:
+Build scripted and dynamic infrastructure to host the apps
 
 <a href="https://www.youtube.com/watch?v=s6sJ0cZUlV8" target="_blank"><img src="images/infra-workflow.jpg" alt="Ep.1: Infrastructure" /></a>
 
-Then, dive deeper. Inspect files, or follow the guidance to try it yourself:
+### Go deeper into these concepts/tools:
+    - Infrastructure as Code (Bicep, ARM or Terraform)
+    - Continuous Deployment (GitHub or any other tool)
+    - Azure Resource Groups
+    - Azure AD: Workload Identity Federation
 
-[01.Infrastructure: The follow-up](01.DeployInfrastructure/README.md)
+### Try it yourself if possible: [01.Infrastructure: Implementation](01.DeployInfrastructure/README.md)
 
 ## Deploying to AKS
 ## Deploying to Container Apps
