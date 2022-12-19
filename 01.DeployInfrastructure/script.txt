@@ -28,4 +28,4 @@ Are we ready to deploy our infrastructure?  Nearly there.  But our Bicep templat
 
 Now, we're ready to deploy. All we have to do, is to commit our templates and workflows, into our git repository. The GitHub workflows will kick off shortly after.
 
-Our infrasructure is now scripted and repeatable. While focused on the this first goal, dive deeper through the below mentioned repository. Thanks for watching and stay posted for our next episode where we install our first app.
+Our infrastructure is now scripted and repeatable. Navigate to the below repository to know how to dive deeper. Thanks for watching and stay posted for our next episode, where we install our first app.
