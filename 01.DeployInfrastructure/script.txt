@@ -16,7 +16,7 @@ Whether we want to upgrade our kubernetes version, add more secrets, or introduc
 
 How do we implement this sample architecture?
 
-We start by authoring our Bicep templates. Here we're using VS Code, and setting templates to create our scheduler, backing services, identities, and more. There are lots of "Infrastructure as Code" templates out there, to use a starting point.
+We start by authoring our Bicep templates. Here we're using VS Code, and setting templates to create our scheduler, backing services, identities, and more. There are lots of "Infrastructure as Code" templates out there, to use as a starting point.
 
 Our infrastructure definition is ready.  We can store it in GitHub.  But we also want to author a GitHub workflow.  It will re-deploy the infrastructure templates each time we update them.  We will create one workflow for AKS template changes.  We'll create another one for Container Apps.
 
@@ -28,4 +28,6 @@ Are we ready to deploy our infrastructure?  Nearly there.  But our Bicep templat
 
 Now, we're ready to deploy. All we have to do, is to commit our templates and workflows, into our git repository. The GitHub workflows will kick off shortly after.
 
-Our infrastructure is now scripted and repeatable. Navigate to the below repository to know how to dive deeper. Thanks for watching and stay posted for our next episode, where we install our first app.
+We now have 2 resource groups. One for AKS infrastructure, and the other for Container Apps.
+
+That's it. Please navigate to the below link, and inspect the files and content related to this goal. Thanks for watching, and stay posted for a coming episode!  

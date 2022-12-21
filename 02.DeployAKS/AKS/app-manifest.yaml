@@ -82,7 +82,11 @@ spec:
         volumeMounts:
         - name: secrets-store01-inline
           mountPath: "/mnt/secrets-store"
-          readOnly: true          
+          readOnly: true
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
       volumes:
         - name: secrets-store01-inline
           csi:
