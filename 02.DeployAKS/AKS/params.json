@@ -1,9 +1,0 @@
-{
-  "name": "kubernetes-fed-credential",
-  "issuer": "https://westeurope.oic.prod-aks.azure.com/16b3c013-d300-468d-ac64-7eda0820b6d3/8d2e0872-ca3d-48a4-a150-8c67ef2365ea/",
-  "subject": "system:serviceaccount:todo-app:todoapp-sa",
-  "description": "Kubernetes service account federated credential",
-  "audiences": [
-    "api://AzureADTokenExchange"
-  ]
-}
