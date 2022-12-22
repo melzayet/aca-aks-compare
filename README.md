@@ -6,9 +6,9 @@ Get deeper in Cloud Native, focusing on one goal at a time. This series will use
 <br/>
 
 
-* [GOAL 1: Build Scripted and Dynamic Infrastructure](#goal-1-build-scripted-and-dynamic-infrastructure)
-* [GOAL 2: Continuously Deploy to AKS](#goal-2-continuously-deploy-to-aks)
-* [GOAL 3: Continuously Deploy to Container Apps](#goal-3-continuously-deploy-to-container-apps)
+* [GOAL 1: Build Scripted and Dynamic Infrastructure](/01.DeployInfrastructure/README.md)
+* [GOAL 2: Continuously Deploy to AKS](/02.DeployAKS/README.md)
+* [GOAL 3: Continuously Deploy to Container Apps](/03.DeployACA/README.md)
 
 
 <br/>
