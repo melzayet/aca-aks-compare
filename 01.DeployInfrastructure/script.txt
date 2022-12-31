@@ -1,3 +1,5 @@
+Cloud Native applications deliver a lot of value. Yet, there are lots of moving parts to reach the desired scalability, availability and security goals. In this series, we will start with a high-level architecture, and gradually drill down into different parts of that architecture. You'll be amazed by the number of concepts involved. From compute, networking, into application and security concepts. However, all will be depicted, and incremental, to help you build depth over time.
+
 To follow a Cloud Native approach, one must start with a strong solid foundation, or infrasructure. We need to build scripted & dynamic infrasructure before we can host our apps.
 
 Let's review a sample architecture for reaching that goal.
@@ -30,4 +32,4 @@ Now, we're ready to deploy. All we have to do, is to commit our templates and wo
 
 We now have 2 resource groups. One for AKS infrastructure, and the other for Container Apps.
 
-That's it. Please navigate to the below link, and inspect the files and content related to this goal. Thanks for watching, and stay posted for a coming episode!  
+That's it. If you haven't already, please find this episode page in "depicted.cloud" website. You will find some follow-up resources.   Thanks for watching, and stay posted for a coming episode!    

@@ -14,4 +14,4 @@ To implement this architecture, we start by authoring the kubernetes manifest. W
 
 We can use kubectl to list our app pods, and get the link to access the UI.
 
-That's it. Please navigate to the below link, and inspect the files and content related to this goal. Thanks for watching, and stay posted for a coming episode!  
+That's it. If you haven't already, please find this episode page in "depicted.cloud" website. You will find some follow-up resources.   Thanks for watching, and stay posted for a coming episode!   
