@@ -1,4 +1,4 @@
-As our application evolves, we want to continusouly, securely, and automatically deploy it to our orchestration environment. Let's start with AKS!
+As our application evolves, we want to continuously, securely, and automatically deploy it to our orchestration environment. Let's start with AKS!
 
 In the last episode, we automated the creation of our cloud-native infrastructure. Our app will be deployed into the AKS cluster in that environment.
 

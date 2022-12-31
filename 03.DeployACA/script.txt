@@ -1,0 +1,26 @@
+As our application evolves, we want to continuously, securely, and automatically deploy it to our orchestration environment. Let's now focus on Azure Container Apps.
+
+
+
+
+In the first episode, we automated the creation of our cloud-native infrastructure. Our app will be deployed into the Container Apps Environment. It's a logical or network boundary where different apps can be hosted.
+
+To deploy our app into Container Apps, we need to define our app template. This could be in ARM, Bicep, or Terraform templates. The definition will point to our docker image location, define CPU and Memory limits, create environment variables, and a lot more. As you might have noticed, it's similar to a kubernetes manifest. 
+
+We have previously set GitHub deployment identity, as an Owner to Container Apps Resource Group . The Github workflow has the permission to deploy our app.
+
+Anytime we bump our app version, or modify the app template, a GitHub workflow can now deploy that new version to Container Apps!
+
+
+
+
+
+To implement this architecture, we start by authoring the a Bicep template. We define the app containers, the number of replicas, exposed ports, and more.  
+In this GitHub workflow, we will deploy our Bicep template using Azure CLI.  
+We're ready to deploy the first version of our app. We just need to commit our template and workflow files.
+We can use Azure CLI to list our apps, and get the link to access the UI.
+
+
+
+
+That's it. Please navigate to the below link, and inspect the files and content related to this goal. Thanks for watching, and stay posted for a coming episode!
