@@ -1,6 +1,6 @@
 Cloud Native applications deliver a lot of value. Yet, there are lots of moving parts to reach the desired scalability, availability and security goals. In this series, we will start with a high-level architecture, and gradually drill down into different parts of that architecture. You'll be amazed by the number of concepts involved. From compute, networking, into application and security concepts. However, all will be depicted, and incremental, to help you build depth over time.
 
-To follow a Cloud Native approach, one must start with a strong solid foundation, or infrasructure. We need to build scripted & dynamic infrasructure before we can host our apps.
+To follow a Cloud Native approach, one must start with a strong solid foundation, or infrastructure. We need to build scripted & dynamic infrastructure before we can host our apps.
 
 Let's review a sample architecture for reaching that goal.
 
