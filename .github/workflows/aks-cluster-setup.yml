@@ -35,7 +35,7 @@ jobs:
           tenant-id: ${{ secrets.TENANT_ID }}
           subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
       
-      - name: Install NGINX
+      - name: Install HELM, NGINX & Worklod Identity webhook
         run: |            
             wget https://get.helm.sh/helm-v3.9.3-linux-amd64.tar.gz
             tar xvf helm-v3.9.3-linux-amd64.tar.gz

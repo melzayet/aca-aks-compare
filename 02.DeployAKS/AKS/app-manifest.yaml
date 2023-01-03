@@ -19,6 +19,10 @@ spec:
       automountServiceAccountToken: true
       containers:
       - name: todoapp
+        resources:
+          limits:
+            cpu: "128Mi"
+            memory: "500m"
         image: "melzayet/todo-api:v0.4"
         env:
           - name: AZURE_CLIENT_ID
