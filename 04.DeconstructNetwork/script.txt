@@ -1,0 +1,9 @@
+We have automated our infrastructure, and our application deployment. End-users can now access the app using a web browser. But what does the journey to reach our application pod look like? What network resources are we going through?
+
+
+When we created our infrastructure. We create a Virtual Network or VNET. We then created a subnet for infrastructure and configured AKS to place the AKS nodes in there. These nodes would get IP addresses out of this subnet range.
+
+We then created a subnet for apps. We configured AKS to let kubernetes pods use IP addresses out of that subnet range. Azure CNI networking which is an AKS feature, has allowed this use of VNET IP addresses for pods and nodes.
+
+When we deployed NGINX as an ingress. It was configured as a kubernetes service of type LoadBalancer. This automatically creates a Load Balancer, which routes end-user traffic to NGINX, which in turn routes traffic to our app
+

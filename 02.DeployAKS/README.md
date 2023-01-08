@@ -1,17 +1,6 @@
 ## GOAL 2: Deploying to AKS
 <br/>
 
-#### **A. GRASP THE GOAL:**
-Start with the below video:
-<a href="https://www.youtube.com/watch?v=1Vyy8RSez1o" target="_blank"><img src="../images/aks-app-workflow.png" alt="Ep.2: Deploying to AKS" /></a>
-
-
-#### **B. MAKE SURE YOU UNDERSTAND THESE CONCEPTS (STAY FOCUSED ON THE GOAL):**
-* [Kubernetes Manifests and Objects](https://kubernetes.io/docs/concepts/overview/working-with-objects/kubernetes-objects/)
-* [Kubernetes core concepts for AKS](https://learn.microsoft.com/en-us/azure/aks/concepts-clusters-workloads)
-* [Azure AD Workload Identity on AKS](https://learn.microsoft.com/en-us/azure/aks/workload-identity-overview)
-
-#### **C. TRY IT YOURSELF (IF POSSIBLE):**
 #### 1. Fork this repository
 This will allow you to set secret and run your own workflows. Click [here](https://github.com/melzayet/azure-cn-depicted/fork) to fork.
 

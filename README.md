@@ -2,6 +2,8 @@
 
 Drill down into Cloud concepts, slowly over time!
 
+This repository holds the source code for [Depicted.Cloud](https://depicted.cloud) series "Cloud Native on Azure"
+
 This series will help you get deeper into Cloud Native, focusing on one goal at a time. It will use Azure as the cloud platform, but the concepts are applicable to other clouds.
 
 <br/>
@@ -18,8 +20,3 @@ This series will help you get deeper into Cloud Native, focusing on one goal at 
 
 <br/>
 <br/>
-
-Each goal is visually depicted in a ~5 min video. Check this sample:
-
-<a href="https://www.youtube.com/watch?v=1Vyy8RSez1o" target="_blank"><img src="images/aks-app-workflow.png" alt="Ep.2: Deploying to AKS" /></a>
-

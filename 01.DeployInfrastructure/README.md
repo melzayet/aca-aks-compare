@@ -1,17 +1,6 @@
 ## GOAL 1: Build Scripted and Dynamic Infrastructure
 <br/>
 
-#### **A. GRASP THE GOAL:**
-Start with the below video:
-<a href="https://www.youtube.com/watch?v=0TlrXEC-Gjs" target="_blank"><img src="../images/infra-workflow.jpg" alt="Ep.1: Infrastructure" /></a>
-
-#### **B. MAKE SURE YOU UNDERSTAND THESE CONCEPTS (STAY FOCUSED ON THE GOAL):**
-* [Infrastructure as Code](https://learn.microsoft.com/en-us/devops/deliver/what-is-infrastructure-as-code)
-* [Continuous Deployment](https://learn.microsoft.com/en-us/devops/deliver/what-is-continuous-delivery)
-* [Azure Resource Groups](https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/manage-resource-groups-portal)
-* [Azure AD: Workload Identity Federation](https://learn.microsoft.com/en-us/azure/active-directory/develop/workload-identity-federation)
-
-#### **C. TRY IT YOURSELF (IF POSSIBLE):**
 #### 1. Fork this repository
 This will allow you to set secret and run your own workflows. Click [here](https://github.com/melzayet/azure-cn-depicted/fork) to fork.
 

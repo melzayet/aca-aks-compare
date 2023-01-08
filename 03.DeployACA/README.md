@@ -1,14 +1,6 @@
 ## GOAL 3: Deploying to Azure Container Apps
 <br/>
 
-#### **A. GRASP THE GOAL:**
-Start with the below video:
-
-
-#### **B. MAKE SURE YOU UNDERSTAND THESE CONCEPTS (STAY FOCUSED ON THE GOAL):**
-
-
-#### **C. TRY IT YOURSELF (IF POSSIBLE):**
 #### 1. Fork this repository
 This will allow you to set secret and run your own workflows. Click [here](https://github.com/melzayet/azure-cn-depicted/fork) to fork.
 
