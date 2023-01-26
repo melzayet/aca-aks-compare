@@ -21,8 +21,8 @@ spec:
       - name: todoapp
         resources:
           limits:
-            cpu: "128Mi"
-            memory: "500m"
+            cpu: "500m"
+            memory: "128Mi"
         image: "melzayet/todo-api:v0.4"
         env:
           - name: AZURE_CLIENT_ID
