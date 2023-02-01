@@ -90,6 +90,7 @@ jobs:
             metadata:
               annotations:
                 azure.workload.identity/client-id: ${{ secrets.APP_IDENTITY_CLIENT_ID }}
+                azure.workload.identity/service-account-token-expiration: "3600"
               labels:
                 azure.workload.identity/use: "true"
               name: ${SERVICE_ACCOUNT_NAME}
