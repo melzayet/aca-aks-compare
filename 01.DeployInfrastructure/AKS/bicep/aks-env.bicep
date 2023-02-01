@@ -3,7 +3,6 @@ param keyVaultNamePrefix string = 'cn-kv'
 param aksClusterName string = 'aks-demo'
 //principal id and object id are used interchangeably
 param deployIdentityPrincipalId string
-param appIdentityPrincipalId string
 param appIdentityclientId string
 param adminGroupObjectId string
 
@@ -89,6 +88,11 @@ resource aksCluster 'Microsoft.ContainerService/managedClusters@2022-09-02-previ
       }      
     }
   }
+}
+
+resource appMI 'Microsoft.ManagedIdentity/userAssignedIdentities@2022-01-31-preview' = {
+  name: 'app-mi'
+  location: location
 }
 
 resource virtualNetwork 'Microsoft.Network/virtualNetworks@2019-11-01' = {
@@ -278,18 +282,18 @@ resource storageRoleAssignment 'Microsoft.Authorization/roleAssignments@2020-04-
   name:guid(storage.id,storageContributorRoleDefinition.id)
   properties: {
     roleDefinitionId: storageContributorRoleDefinition.id
-    principalId: appIdentityPrincipalId
+    principalId: appMI.properties.principalId
     principalType:'ServicePrincipal'
   }
 }
 
 resource csiKvRoleAssignment 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = {
   scope: keyVault
-  name:guid(keyVault.id, appIdentityPrincipalId, '4633458b-17de-408a-b874-0445c86b69e6')
+  name:guid(keyVault.id, '4633458b-17de-408a-b874-0445c86b69e6')
   properties: {
     // KV Secretsuser
     roleDefinitionId: resourceId('Microsoft.Authorization/roleDefinitions/', '4633458b-17de-408a-b874-0445c86b69e6')
-    principalId: appIdentityPrincipalId
+    principalId: appMI.properties.principalId
     principalType:'ServicePrincipal'
   }
 }
@@ -320,7 +324,7 @@ resource cosmosRoleAssignment 'Microsoft.DocumentDB/databaseAccounts/sqlRoleAssi
   name: '736180af-7fbc-4c7f-9004-22735173c2c4'
   parent: cosmosAccount
   properties: {
-    principalId: appIdentityPrincipalId
+    principalId: appMI.properties.principalId
     roleDefinitionId: cosmosRBAC.id
     scope: cosmosAccount.id
   }
