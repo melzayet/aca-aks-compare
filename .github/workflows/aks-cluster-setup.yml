@@ -75,7 +75,6 @@ jobs:
               --set azureTenantID="${{ secrets.TENANT_ID }}"
             AZURE_SUBSCRIPTION_ID=${{ secrets.SUBSCRIPTION_ID }}
             SERVICE_ACCOUNT_ISSUER=`az aks show --resource-group ${{ secrets.AKS_RG }} --name aks-demo --query "oidcIssuerProfile.issuerUrl" -otsv`
-            APPLICATION_OBJECT_ID=${{ secrets.APP_IDENTITY_PRINCIPAL_ID }}
             SERVICE_ACCOUNT_NAMESPACE=todo-app
             SERVICE_ACCOUNT_NAME=todoapp-sa
             APPLICATION_CLIENT_ID=${{ secrets.APP_IDENTITY_CLIENT_ID }}            
