@@ -88,7 +88,7 @@ jobs:
             kind: ServiceAccount
             metadata:
               annotations:
-                azure.workload.identity/client-id: ${{ APPLICATION_CLIENT_ID }}
+                azure.workload.identity/client-id: ${APPLICATION_CLIENT_ID}
                 azure.workload.identity/service-account-token-expiration: "3600"
               labels:
                 azure.workload.identity/use: "true"
@@ -107,7 +107,7 @@ jobs:
               parameters:
                 usePodIdentity: "false"
                 useVMManagedIdentity: "false"          
-                clientID: "${{ APPLICATION_CLIENT_ID }}" # Setting this to use workload identity
+                clientID: ${APPLICATION_CLIENT_ID} # Setting this to use workload identity
                 tenantId: "${{ secrets.TENANT_ID }}"        # The tenant ID of the key vault
                 keyvaultName: ${kvName}      # Set to the name of your key vault
                 objects:  |
