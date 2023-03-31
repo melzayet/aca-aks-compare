@@ -77,7 +77,7 @@ jobs:
             SERVICE_ACCOUNT_ISSUER=`az aks show --resource-group ${{ secrets.AKS_RG }} --name aks-demo --query "oidcIssuerProfile.issuerUrl" -otsv`
             SERVICE_ACCOUNT_NAMESPACE=todo-app
             SERVICE_ACCOUNT_NAME=todoapp-sa
-            APPLICATION_CLIENT_ID=${{ secrets.APP_IDENTITY_CLIENT_ID }}            
+            APPLICATION_CLIENT_ID=`az identity show --name app-mi -g ${{ secrets.AKS_RG }}  --query "clientId"`
             cat <<EOF | kubectl apply -f -
             apiVersion: v1
             kind: Namespace
@@ -88,7 +88,7 @@ jobs:
             kind: ServiceAccount
             metadata:
               annotations:
-                azure.workload.identity/client-id: ${{ secrets.APP_IDENTITY_CLIENT_ID }}
+                azure.workload.identity/client-id: ${{ APPLICATION_CLIENT_ID }}
                 azure.workload.identity/service-account-token-expiration: "3600"
               labels:
                 azure.workload.identity/use: "true"
@@ -107,7 +107,7 @@ jobs:
               parameters:
                 usePodIdentity: "false"
                 useVMManagedIdentity: "false"          
-                clientID: "${{ secrets.APP_IDENTITY_CLIENT_ID }}" # Setting this to use workload identity
+                clientID: "${{ APPLICATION_CLIENT_ID }}" # Setting this to use workload identity
                 tenantId: "${{ secrets.TENANT_ID }}"        # The tenant ID of the key vault
                 keyvaultName: ${kvName}      # Set to the name of your key vault
                 objects:  |
