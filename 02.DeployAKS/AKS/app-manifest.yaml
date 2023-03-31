@@ -22,7 +22,7 @@ spec:
       - name: todoapp
         resources:
           limits:
-            cpu: "500m"
+            cpu: "50m"
             memory: "128Mi"
         image: "melzayet/todo-api:v0.4"
         env:
@@ -91,7 +91,7 @@ spec:
         resources:
           limits:
             memory: "128Mi"
-            cpu: "500m"
+            cpu: "50m"
       volumes:
         - name: secrets-store01-inline
           csi:
