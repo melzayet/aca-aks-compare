@@ -6,7 +6,7 @@ This repo will let you easily deploy the same application to both services, and 
 
 <br/>
 
-**This demo environment can always be re-deployed through a few clicks using GitHub Actions**
+**The AKS/Container Apps environments are designed to be (re-)deployed through a single click**
 
 ![Run Workflow](/images/run-workflow.jpg)
 
