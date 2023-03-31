@@ -3,7 +3,6 @@ param keyVaultNamePrefix string = 'cn-kv'
 param aksClusterName string = 'aks-demo'
 //principal id and object id are used interchangeably
 param deployIdentityPrincipalId string
-param appIdentityclientId string
 param adminGroupObjectId string
 
 var appSubnetName = 'apps-subnet'
@@ -189,7 +188,7 @@ resource keyVaultSecretMI 'Microsoft.KeyVault/vaults/secrets@2019-09-01' = {
   parent: keyVault
   name: 'MiClientID'
   properties: {
-    value: appIdentityclientId
+    value: appMI.properties.clientId
   }
 }
 
