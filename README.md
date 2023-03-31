@@ -6,6 +6,10 @@ This repo will let you easily deploy the same application to both services, and 
 
 <br/>
 
+**This demo environment can always be re-deployed through a few clicks using GitHub Actions**
+
+![Run Workflow](/images/run-workflow.jpg)
+
 ## Concepts in this demo
 * Infrastructure as Code using Bicep
 * Storing and fetching secrets from Azure Key Vault
