@@ -77,7 +77,19 @@ jobs:
             SERVICE_ACCOUNT_ISSUER=`az aks show --resource-group ${{ secrets.AKS_RG }} --name aks-demo --query "oidcIssuerProfile.issuerUrl" -otsv`
             SERVICE_ACCOUNT_NAMESPACE=todo-app
             SERVICE_ACCOUNT_NAME=todoapp-sa
-            APPLICATION_CLIENT_ID=`az identity show --name app-mi -g ${{ secrets.AKS_RG }}  --query "clientId"`
+            APPLICATION_CLIENT_ID=`az identity show --name app-mi -g ${{ secrets.AKS_RG }}  --query "clientId"`                        
+            cat <<EOF > params.json
+            {
+            "name": "kubernetes-federated-credential",
+            "issuer": "${SERVICE_ACCOUNT_ISSUER}",
+            "subject": "system:serviceaccount:${SERVICE_ACCOUNT_NAMESPACE}:${SERVICE_ACCOUNT_NAME}",
+            "description": "Kubernetes service account federated credential",
+            "audiences": [
+                    "api://AzureADTokenExchange"
+            ]
+            }
+            EOF
+            az identity federated-credential create --identity-name app-mi --name kubernetes-federated-credential -g ${{ secrets.AKS_RG }} --issuer ${SERVICE_ACCOUNT_ISSUER} --subject "system:serviceaccount:${SERVICE_ACCOUNT_NAMESPACE}:${SERVICE_ACCOUNT_NAME}" --audiences 'api://AzureADTokenExchange' 
             cat <<EOF | kubectl apply -f -
             apiVersion: v1
             kind: Namespace
