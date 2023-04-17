@@ -49,7 +49,7 @@ resource aksCluster 'Microsoft.ContainerService/managedClusters@2022-09-02-previ
         minCount: 1
         mode: 'System'
         name: 'default'
-        orchestratorVersion: '1.24.6'
+        orchestratorVersion: '1.24.10'
         osDiskSizeGB: 128
         osDiskType:'Managed'
         osSKU:'Ubuntu'
@@ -68,7 +68,7 @@ resource aksCluster 'Microsoft.ContainerService/managedClusters@2022-09-02-previ
     }       
     disableLocalAccounts: true
     enableRBAC: true        
-    kubernetesVersion: '1.24.6'    
+    kubernetesVersion: '1.24.10'    
     networkProfile: {
       dnsServiceIP: '192.168.100.10'
       dockerBridgeCidr: '172.17.0.1/16'     

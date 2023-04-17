@@ -11,7 +11,7 @@ resource "azurerm_kubernetes_cluster" "akscluster" {
   dns_prefix              = var.prefix
   location                = var.location
   resource_group_name     = var.resource_group_name
-  kubernetes_version      = "1.24.6"
+  kubernetes_version      = "1.24.10"
   azure_policy_enabled    = true
   oidc_issuer_enabled     = true
 
@@ -21,7 +21,7 @@ resource "azurerm_kubernetes_cluster" "akscluster" {
     os_disk_size_gb = 30
     node_count = 1
     type            = "VirtualMachineScaleSets"
-    orchestrator_version  = "1.24.6" 
+    orchestrator_version  = "1.24.10" 
     zones      = [1,2,3]
     only_critical_addons_enabled = true
     upgrade_settings {
@@ -75,7 +75,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "nodepool_cpu_spot" {
     priority              = "Spot"
     spot_max_price        = -1
     eviction_policy       = "Delete"
-    orchestrator_version  = "1.24.6"    
+    orchestrator_version  = "1.24.10"    
     tags = {
       "nodepool-type" = "user"
       "environment"   = "staging"
