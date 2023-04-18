@@ -8,7 +8,7 @@ on:
       [ main ]
     
     paths:
-      - "01.DeployInfrastructure/ContainerApps/**"
+      - "01.DeployInfrastructure/ContainerApps/bicep/**"
       - ".github/workflows/aca-infra-deploy.yml"
 
   # Allow manually trigger 

@@ -206,7 +206,7 @@ resource containerAppsEnv 'Microsoft.App/managedEnvironments@2022-10-01' = {
       dockerBridgeCidr: '172.17.0.1/16'
       platformReservedCidr: '192.168.100.0/24'
       platformReservedDnsIP: '192.168.100.10'
-      outboundSettings: { 
+      outboundSettings:{
         outBoundType: 'LoadBalancer'
       }
     }
